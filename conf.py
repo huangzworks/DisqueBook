@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Disque 命令参考 documentation build configuration file, created by
+# Disque 使用教程 documentation build configuration file, created by
 # sphinx-quickstart on Sat Apr 25 12:14:34 2015.
 #
 # This file is execfile()d with the current directory set to its
@@ -46,7 +46,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Disque 命令参考'
+project = u'Disque 使用教程'
 copyright = u'2015, 黄健宏(huangz)'
 author = u'黄健宏(huangz)'
 
@@ -222,7 +222,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'Disque.tex', u'Disque 命令参考 Documentation',
+  (master_doc, 'Disque.tex', u'Disque 使用教程 Documentation',
    u'黄健宏(huangz)', 'manual'),
 ]
 
@@ -252,7 +252,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'disque', u'Disque 命令参考 Documentation',
+    (master_doc, 'disque', u'Disque 使用教程 Documentation',
      [author], 1)
 ]
 
@@ -266,7 +266,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (master_doc, 'Disque', u'Disque 命令参考 Documentation',
+  (master_doc, 'Disque', u'Disque 使用教程 Documentation',
    author, 'Disque', 'One line description of project.',
    'Miscellaneous'),
 ]

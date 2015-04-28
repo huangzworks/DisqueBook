@@ -1,10 +1,25 @@
-.. Disque 命令参考 documentation master file, created by
+.. Disque 使用教程 documentation master file, created by
    sphinx-quickstart on Sat Apr 25 12:14:34 2015.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Disque 命令参考
+Disque 使用教程
 ===========================================
+
+TODO 项目描述，官方地址连接
+
+安装方法
+-------------------------------------------
+
+TODO
+
+运行方法
+-------------------------------------------
+
+TODO
+
+命令文档
+-------------------------------------------
 
 .. toctree::
    :maxdepth: 2
@@ -31,8 +46,9 @@ Disque 命令参考
 关于本文档
 -------------------------------------------
 
-本文档由\ `黄健宏(huangz) <http://www.huangz.me/>`_\ 翻译，
-版权归 Disque 官方所有。
+本文档由\ `黄健宏(huangz) <http://www.huangz.me/>`_\ 翻译并改写，
+翻译部分的版权归 Disque 官方所有，
+改写部分的版权归作者所有。
 
 追踪本文档的更新信息请关注本文档的 github 项目页面，
 或者关注译者的各个社交网站。
@@ -48,7 +64,7 @@ Disque 命令参考
    :align: right
 
 对文档进行翻译需要花费大量的时间和精力，
-如果你喜欢这个《Disque 命令参考》文档的话，
+如果你喜欢这个《Disque 使用教程》文档的话，
 欢迎通过捐款的方式，
 支持译者的翻译工作，
 非常感谢！
