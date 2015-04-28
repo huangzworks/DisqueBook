@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Disque 使用教程
+Disque 使用教程（DisqueBook.com）
 ===========================================
 
 Disque 是一个内存储存的分布式任务队列实现，
