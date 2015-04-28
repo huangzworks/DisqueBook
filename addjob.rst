@@ -75,3 +75,14 @@ ADDJOB
 或者任务已经被正确地复制到了指定数量的节点上面时，
 命令返回已入队任务的 ID ；
 否则命令返回错误。
+
+::
+
+    disque> ADDJOB greeting "hello world!" 0            -- 将任务放进队列里面
+    DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ    -- 任务 ID
+
+    disque> ADDJOB greeting "good morning!" 0
+    DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ
+
+    disque> ADDJOB greeting "bye bye~" 0
+    DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ
