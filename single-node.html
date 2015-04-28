@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>搭建单节点集群 &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="搭建多节点集群" href="multi-nodes.html"/>
+        <link rel="prev" title="安装方法" href="install.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +57,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -69,9 +71,9 @@
         
           
           
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">安装方法</a></li>
-<li class="toctree-l1"><a class="reference internal" href="single-node.html">搭建单节点集群</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">搭建单节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
 </ul>
@@ -112,8 +114,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>搭建单节点集群</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/single-node.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +127,40 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="id1">
+<h1>搭建单节点集群<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>Disque 以集群模式运行，
+每个服务器都是集群中的一个节点，
+用户可以运行任意数量的节点，
+只要确保每个节点的端口号不同即可。</p>
+<p>在默认情况下，
+运行 Disque 服务器程序 <code class="docutils literal"><span class="pre">disque-server</span></code> 将启动一个端口号为 <code class="docutils literal"><span class="pre">7711</span></code> 的 Disque 节点：</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ./disque-server
+528:C 28 Apr 11:50:08.519 # Warning: no config file specified, using the default config. In order to specify a config file use ./disque-server /path/to/disque.conf
+528:P 28 Apr 11:50:08.521 * Increased maximum number of open files to 10032 (it was originally set to 256).
+528:P 28 Apr 11:50:08.528 * Node configuration loaded, I&#39;m 216f7fa1b58239ad29dd64c02bfe50e609e88575
+                                        Disque 0.0.1 (0bbd831e/0) 64 bit
+          _ -
+        .                               Port: 7711
+        .    o    .                     PID: 528
+                .
+              -                              http://disque.io
 
-  
-  <div id="search-results">
-  
-  </div>
+
+528:P 28 Apr 11:50:08.528 # Server started, Disque version 0.0.1
+528:P 28 Apr 11:50:08.529 * The server is now ready to accept connections on port 7711
+</pre></div>
+</div>
+<p>因为 Disque 集群并不限制节点的数量，
+所以即使只有一个节点，
+Disque 也是可以执行命令的，
+如果你只是打算测试一下 Disque ，
+那么现在就可以使用 Disque 客户端对 Disque 进行测试了。</p>
+<p>另一方面，
+如果你打算构建一个由多个节点组成的 Disque 集群，
+那么请继续阅读接下来的一节。</p>
+</div>
+
 
           </div>
           
@@ -159,6 +186,15 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="multi-nodes.html" class="btn btn-neutral float-right" title="搭建多节点集群" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install.html" class="btn btn-neutral" title="安装方法" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +232,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +247,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>搭建多节点集群 &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="客户端" href="client.html"/>
+        <link rel="prev" title="搭建单节点集群" href="single-node.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +57,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -69,10 +71,10 @@
         
           
           
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">安装方法</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single-node.html">搭建单节点集群</a></li>
-<li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">搭建多节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
 </ul>
 <ul>
@@ -112,8 +114,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>搭建多节点集群</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/multi-nodes.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +127,75 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="id1">
+<h1>搭建多节点集群<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>因为每个 Disque 节点都会将自己的配置信息储存在 <code class="docutils literal"><span class="pre">disque-server</span></code> 运行的文件夹里面，
+而同一个文件夹只能有一份这样的配置信息，
+所以如果我们打算同时运行多个节点，
+那么就必须在不同的文件夹里面运行 <code class="docutils literal"><span class="pre">disque-server</span></code> ，
+并为每个节点指定不同的端口。</p>
+<p>假设我们现在打算运行三个 Disque 节点，
+那么首先要做的就是创建三个文件夹，
+然后分别在这些文件夹里面运行 <code class="docutils literal"><span class="pre">disque-server</span></code> ：</p>
+<div class="highlight-python"><div class="highlight"><pre>$ mkdir node10086 node10087 node10088   -- 创建三个文件夹
 
-  
-  <div id="search-results">
-  
-  </div>
+$ cd node10086                          -- 进入 node10086 文件夹
+
+$ disque-server --port 10086 &amp;          -- 然后启动一个端口号为 10086 的节点
+[1] 16941
+
+$ cd ../node10087/                      -- 进入 node10087 文件夹
+
+$ disque-server --port 10087 &amp;          -- 然后启动一个端口号为 10087 的节点
+[2] 16942
+
+$ cd ../node10088/                      -- 进入 node10088 文件夹
+
+$ disque-server --port 10088 &amp;          -- 然后启动一个端口号为 10088 的节点
+[3] 16943
+</pre></div>
+</div>
+<p>在启动了三个节点之后，
+接下来要做的就是将这三个节点组合起来，
+形成一个包含三个节点的集群，
+步骤如下：</p>
+<div class="highlight-python"><div class="highlight"><pre>$ disque -p 10086                               -- 连接端口号为 10086 的节点
+127.0.0.1:10086&gt; CLUSTER INFO                   -- 打印集群信息
+cluster_state:ok
+cluster_known_nodes:1                           -- 目前集群只有一个节点
+cluster_reachable_nodes:1
+cluster_size:0
+cluster_stats_messages_sent:0
+cluster_stats_messages_received:0
+
+127.0.0.1:10086&gt; CLUSTER MEET 127.0.0.1 10087   -- 将端口号为 10087 的节点加入到集群里面
+OK
+
+127.0.0.1:10086&gt; CLUSTER INFO
+cluster_state:ok
+cluster_known_nodes:2                           -- 集群现在有两个节点
+cluster_reachable_nodes:2
+cluster_size:1
+cluster_stats_messages_sent:5
+cluster_stats_messages_received:5
+
+127.0.0.1:10086&gt; CLUSTER MEET 127.0.0.1 10088   -- 将端口号为 10088 的节点加入到集群里面
+OK
+
+127.0.0.1:10086&gt; CLUSTER INFO
+cluster_state:ok
+cluster_known_nodes:3                           -- 集群现在有三个节点
+cluster_reachable_nodes:3
+cluster_size:2
+cluster_stats_messages_sent:23
+cluster_stats_messages_received:23
+</pre></div>
+</div>
+<p>大功告成！
+现在我们已经建立了一个由三个节点组成的 Disque 集群，
+你可以随意地向这个集群发送命令来进行测试了。</p>
+</div>
+
 
           </div>
           
@@ -159,6 +221,15 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="client.html" class="btn btn-neutral float-right" title="客户端" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="single-node.html" class="btn btn-neutral" title="搭建单节点集群" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +267,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +282,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

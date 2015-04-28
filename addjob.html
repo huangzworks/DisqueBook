@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>ADDJOB &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="GETJOB" href="getjob.html"/>
+        <link rel="prev" title="客户端" href="client.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +57,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -75,8 +77,8 @@
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">ADDJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qpeek.html">QPEEK</a></li>
@@ -112,8 +114,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>ADDJOB</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/addjob.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +127,84 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="addjob">
+<h1>ADDJOB<a class="headerlink" href="#addjob" title="永久链接至标题">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre>ADDJOB queue_name job &lt;ms-timeout&gt; [REPLICATE &lt;count&gt;] [DELAY &lt;sec&gt;] [RETRY &lt;sec&gt;] [TTL &lt;sec&gt;] [MAXLEN &lt;count&gt;] [ASYNC]
+</pre></div>
+</div>
+<p>将一个新任务添加到指定的队列里面。</p>
+<p>以下是各个参数的含义：</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">queue_name</span></code> ：
+队列的名字，
+可以是任意字符串。
+如果指定的队列并不存在，
+那么它将被自动创建，
+用户无需手动创建队列。
+当队列没有任务可传递时，
+它也会自动被释放。</li>
+<li><code class="docutils literal"><span class="pre">job</span></code> ：
+使用字符串描述的任务。
+Disque 不关心任务的具体含义，
+对于它来说，
+一项任务就是一条待传送的消息。</li>
+<li><code class="docutils literal"><span class="pre">ms-timeout</span></code> ：
+毫秒精度的命令超时限制。
+如果用户没有使用 <code class="docutils literal"><span class="pre">ASYNC</span></code> 选项，
+并且在指定的毫秒数之内，
+任务的复制级别（replication level）未能达到指定的要求，
+那么命令将返回一个错误，
+而节点会尽可能地清理未发出的消息，
+并将遍布于整个集群的消息副本删除，
+但是任务仍然有可能会在之后被传递。
+在默认的服务器频率（hz）下，
+实际的超时解析度为 1/10 秒钟。</li>
+<li><code class="docutils literal"><span class="pre">REPLICATE</span> <span class="pre">count</span></code> ：
+指定任务需要复制至多少个节点。</li>
+<li><code class="docutils literal"><span class="pre">DELAY</span> <span class="pre">sec</span></code> ：
+指定任务在放入各个节点的队列之前，
+需要等待多少秒钟。</li>
+<li><code class="docutils literal"><span class="pre">RETRY</span> <span class="pre">sec</span></code> ：
+在未接到 <code class="docutils literal"><span class="pre">ACK</span></code> 回复的情况下，
+节点在多少秒钟之后才会重新将任务放入待传递的队列里面。
+如果 <code class="docutils literal"><span class="pre">sec</span></code> 参数的值为 <code class="docutils literal"><span class="pre">0</span></code> ，
+那么任务将以“最多一次”（at-most-once）的方式进行传递：
+这个任务不会被重新放入到待传递队列里面，
+并且它的复制因子（replication factor）也只会为 1 。</li>
+<li><code class="docutils literal"><span class="pre">TTL</span> <span class="pre">sec</span></code> ：
+秒级精度的任务生存时间。
+在生存时间消耗完毕之后，
+即使任务还未被成功传递，
+它也会被删除。</li>
+<li><code class="docutils literal"><span class="pre">MAXLEN</span> <span class="pre">count</span></code> ：
+指定队列最多可以存放多少个待传递的任务。
+在队列已满的情况下，
+尝试添加新任务将被拒绝，
+而客户端也会接收到一个错误。</li>
+<li><code class="docutils literal"><span class="pre">ASYNC</span></code> ：
+要求服务器让命令尽快返回，
+并在后台执行将任务复制至其他节点的工作。
+任务会尽快地被放入到队列里面，
+而在普通情况下，
+只有当任务已经被放入到队列里面的时候，
+客户端才会接收到正面的回复。</li>
+</ul>
+<p>当用户指定了 <code class="docutils literal"><span class="pre">ASYNC</span></code> 选项，
+或者任务已经被正确地复制到了指定数量的节点上面时，
+命令返回已入队任务的 ID ；
+否则命令返回错误。</p>
+<div class="highlight-python"><div class="highlight"><pre>disque&gt; ADDJOB greeting &quot;hello world!&quot; 0            -- 将任务放进队列里面
+DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ    -- 任务 ID
 
-  
-  <div id="search-results">
-  
-  </div>
+disque&gt; ADDJOB greeting &quot;good morning!&quot; 0
+DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ
+
+disque&gt; ADDJOB greeting &quot;bye bye~&quot; 0
+DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ
+</pre></div>
+</div>
+</div>
+
 
           </div>
           
@@ -159,6 +230,15 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="getjob.html" class="btn btn-neutral float-right" title="GETJOB" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="client.html" class="btn btn-neutral" title="客户端" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +276,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +291,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

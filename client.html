@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>客户端 &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="ADDJOB" href="addjob.html"/>
+        <link rel="prev" title="搭建多节点集群" href="multi-nodes.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +57,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -69,11 +71,11 @@
         
           
           
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">安装方法</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single-node.html">搭建单节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
-<li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">客户端</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
@@ -112,8 +114,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>客户端</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/client.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +127,19 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="id1">
+<h1>客户端<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>Disque 在源码中附带了命令行客户端程序 <code class="docutils literal"><span class="pre">disque</span></code> ，
+通过这个程序可以以交互的形式向 Disque 发送命令：</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ./disque
+127.0.0.1:7711&gt; PING
+PONG
+</pre></div>
+</div>
+<p>另外你也可以使用 Disque 的 Ruby 客户端来操作 Disque ：
+<a class="reference external" href="https://rubygems.org/gems/disque">https://rubygems.org/gems/disque</a></p>
+</div>
 
-  
-  <div id="search-results">
-  
-  </div>
 
           </div>
           
@@ -159,6 +165,15 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="addjob.html" class="btn btn-neutral float-right" title="ADDJOB" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="multi-nodes.html" class="btn btn-neutral" title="搭建多节点集群" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +211,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +226,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

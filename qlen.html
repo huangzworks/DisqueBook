@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>QLEN &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="QPEEK" href="qpeek.html"/>
+        <link rel="prev" title="GETJOB" href="getjob.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +57,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -75,10 +77,10 @@
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
 </ul>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">QLEN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qpeek.html">QPEEK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="show.html">SHOW</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ackjob.html">ACKJOB</a></li>
@@ -112,8 +114,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>QLEN</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/qlen.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +127,30 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="qlen">
+<h1>QLEN<a class="headerlink" href="#qlen" title="永久链接至标题">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre>QLEN &lt;queue-name&gt;
+</pre></div>
+</div>
+<p>返回队列目前存放的任务数量。</p>
+<div class="highlight-python"><div class="highlight"><pre>disque&gt; QLEN greeting                               -- 空队列
+(integer) 0
 
-  
-  <div id="search-results">
-  
-  </div>
+disque&gt; ADDJOB greeting &quot;hello world!&quot; 0            -- 将第一个任务推入到队列
+DI216f7fa141be40b1a54db80875bacec836377a6905a0SQ
+
+disque&gt; QLEN greeting
+(integer) 1
+
+disque&gt; ADDJOB greeting &quot;good morning!&quot; 0           -- 将第二个任务推入到队列
+DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ
+
+disque&gt; QLEN greeting
+(integer) 2
+</pre></div>
+</div>
+</div>
+
 
           </div>
           
@@ -159,6 +176,15 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="qpeek.html" class="btn btn-neutral float-right" title="QPEEK" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="getjob.html" class="btn btn-neutral" title="GETJOB" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +222,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +237,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

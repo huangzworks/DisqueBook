@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>INFO &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="HELLO" href="hello.html"/>
+        <link rel="prev" title="FASTACK" href="fastack.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +57,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -75,7 +77,7 @@
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
 </ul>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
@@ -83,7 +85,7 @@
 <li class="toctree-l1"><a class="reference internal" href="show.html">SHOW</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ackjob.html">ACKJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fastack.html">FASTACK</a></li>
-<li class="toctree-l1"><a class="reference internal" href="info.html">INFO</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">INFO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hello.html">HELLO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="enqueue.html">ENQUEUE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dequeue.html">DEQUEUE</a></li>
@@ -112,8 +114,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>INFO</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/info.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +127,78 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="info">
+<h1>INFO<a class="headerlink" href="#info" title="永久链接至标题">¶</a></h1>
+<p>返回节点信息和统计数据。</p>
+<div class="highlight-python"><div class="highlight"><pre>disque&gt; INFO
+# Server
+disque_version:0.0.1
+disque_git_sha1:0bbd831e
+disque_git_dirty:0
+disque_build_id:cd264e0f87773cd5
+os:Darwin 13.3.0 x86_64
+arch_bits:64
+multiplexing_api:kqueue
+gcc_version:4.2.1
+process_id:528
+run_id:4b4aff36750579760e62d213a311ff7202560caa
+tcp_port:7711
+uptime_in_seconds:374
+uptime_in_days:0
+hz:10
+config_file:
 
-  
-  <div id="search-results">
-  
-  </div>
+# Clients
+connected_clients:1
+client_longest_output_list:0
+client_biggest_input_buf:0
+blocked_clients:0
+
+# Memory
+used_memory:960160
+used_memory_human:937.66K
+used_memory_rss:1519616
+used_memory_peak:960864
+used_memory_peak_human:938.34K
+mem_fragmentation_ratio:1.58
+mem_allocator:libc
+
+# Jobs
+registered_jobs:0
+
+# Queues
+registered_queues:1
+
+# Persistence
+loading:0
+aof_enabled:0
+aof_rewrite_in_progress:0
+aof_rewrite_scheduled:0
+aof_last_rewrite_time_sec:-1
+aof_current_rewrite_time_sec:-1
+aof_last_bgrewrite_status:ok
+aof_last_write_status:ok
+
+# Stats
+total_connections_received:1
+total_commands_processed:9
+instantaneous_ops_per_sec:0
+total_net_input_bytes:780
+total_net_output_bytes:415
+instantaneous_input_kbps:0.00
+instantaneous_output_kbps:0.00
+rejected_connections:0
+latest_fork_usec:0
+
+# CPU
+used_cpu_sys:1.54
+used_cpu_user:0.73
+used_cpu_sys_children:0.00
+used_cpu_user_children:0.00
+</pre></div>
+</div>
+</div>
+
 
           </div>
           
@@ -159,6 +224,15 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="hello.html" class="btn btn-neutral float-right" title="HELLO" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="fastack.html" class="btn btn-neutral" title="FASTACK" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +270,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +285,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

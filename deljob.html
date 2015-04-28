@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>DELJOB &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,8 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="prev" title="DEQUEUE" href="dequeue.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +56,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -75,7 +76,7 @@
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
 </ul>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
@@ -87,7 +88,7 @@
 <li class="toctree-l1"><a class="reference internal" href="hello.html">HELLO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="enqueue.html">ENQUEUE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dequeue.html">DEQUEUE</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deljob.html">DELJOB</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">DELJOB</a></li>
 </ul>
 
           
@@ -112,8 +113,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>DELJOB</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/deljob.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +126,18 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="deljob">
+<h1>DELJOB<a class="headerlink" href="#deljob" title="永久链接至标题">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre>DELJOB &lt;job-id&gt; ... &lt;job-id&gt;
+</pre></div>
+</div>
+<p>在节点里面彻底地删除给定的任务。
+这个命令和 <code class="docutils literal"><span class="pre">FASTACK</span></code> 很相似，
+唯一的不同是，
+<code class="docutils literal"><span class="pre">DELJOB</span></code> 命令引发的删除操作只会在单个节点里面执行，
+它不会将 <code class="docutils literal"><span class="pre">DELJOB</span></code> 集群总线消息（cluster bus message）发送至其他节点。</p>
+</div>
 
-  
-  <div id="search-results">
-  
-  </div>
 
           </div>
           
@@ -159,6 +163,13 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="dequeue.html" class="btn btn-neutral" title="DEQUEUE" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +207,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +222,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

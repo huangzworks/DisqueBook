@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>SHOW &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="ACKJOB" href="ackjob.html"/>
+        <link rel="prev" title="QPEEK" href="qpeek.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +57,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -75,12 +77,12 @@
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
 </ul>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qpeek.html">QPEEK</a></li>
-<li class="toctree-l1"><a class="reference internal" href="show.html">SHOW</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">SHOW</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ackjob.html">ACKJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fastack.html">FASTACK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="info.html">INFO</a></li>
@@ -112,8 +114,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>SHOW</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/show.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +127,43 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="show">
+<h1>SHOW<a class="headerlink" href="#show" title="永久链接至标题">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre>SHOW &lt;job-id&gt;
+</pre></div>
+</div>
+<p>返回任务的相关描述。</p>
+<div class="highlight-python"><div class="highlight"><pre>127.0.0.1:7711&gt; SHOW DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ
+1) &quot;id&quot;                                                 -- 任务 ID
+2) &quot;DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ&quot;
+3) &quot;queue&quot;                                              -- 所属队列
+4) &quot;greeting&quot;
+5) &quot;state&quot;                                              -- 任务状态
+6) &quot;queued&quot;
+7) &quot;repl&quot;
+8) (integer) 1
+9) &quot;ttl&quot;                                                -- 生存时间
+10) (integer) 86080
+11) &quot;ctime&quot;                                             -- 创建时间
+12) (integer) 1430193729317000000
+13) &quot;delay&quot;                                             -- 是否延迟？
+14) (integer) 0
+15) &quot;retry&quot;                                             -- 何时进行重试？
+16) (integer) 8640
+17) &quot;nodes-delivered&quot;                                   -- 已向以下节点发送该任务
+18) 1) &quot;216f7fa1b58239ad29dd64c02bfe50e609e88575&quot;
+19) &quot;nodes-confirmed&quot;                                   -- 以下节点已确认收到该任务
+20) (empty list or set)
+21) &quot;next-requeue-within&quot;
+22) (integer) 8319321
+23) &quot;next-awake-within&quot;
+24) (integer) 8318821
+25) &quot;body&quot;                                              -- 任务的内容
+26) &quot;good morning!&quot;
+</pre></div>
+</div>
+</div>
 
-  
-  <div id="search-results">
-  
-  </div>
 
           </div>
           
@@ -159,6 +189,15 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ackjob.html" class="btn btn-neutral float-right" title="ACKJOB" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qpeek.html" class="btn btn-neutral" title="QPEEK" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +235,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +250,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

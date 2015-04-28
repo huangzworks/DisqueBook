@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>QPEEK &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="SHOW" href="show.html"/>
+        <link rel="prev" title="QLEN" href="qlen.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +57,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -75,11 +77,11 @@
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
 </ul>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="qpeek.html">QPEEK</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">QPEEK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="show.html">SHOW</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ackjob.html">ACKJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fastack.html">FASTACK</a></li>
@@ -112,8 +114,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>QPEEK</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/qpeek.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +127,48 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="qpeek">
+<h1>QPEEK<a class="headerlink" href="#qpeek" title="永久链接至标题">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre>QPEEK &lt;qname&gt; &lt;count&gt;
+</pre></div>
+</div>
+<p>在不取出任务的情况下，
+从队列里面返回指定数量的任务：</p>
+<ul class="simple">
+<li>当 <code class="docutils literal"><span class="pre">count</span></code> 为正数时，
+命令会按照任务入队的时间，
+以从旧到新的顺序返回任务（和 <code class="docutils literal"><span class="pre">GETJOB</span></code> 命令一样，尽可能地维持一个先进先出的顺序）。</li>
+<li>当 <code class="docutils literal"><span class="pre">count</span></code> 为负数时，
+命令以从新到旧的顺序返回任务。</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre>disque&gt; ADDJOB greeting &quot;hello world!&quot; 0                    -- 将三个任务放入队列
+DI216f7fa1590f8975b29db52f663c18f80f73c24705a0SQ
 
-  
-  <div id="search-results">
-  
-  </div>
+disque&gt; ADDJOB greeting &quot;good morning!&quot; 0
+DI216f7fa1c33c8d99678f44b5658545f3f2603b8d05a0SQ
+
+disque&gt; ADDJOB greeting &quot;bye bye~&quot; 0
+DI216f7fa1d137377120adaf571418aff559578b8a05a0SQ
+
+disque&gt; QPEEK greeting 10                                   -- 按从旧到新的顺序返回任务
+1) 1) &quot;DI216f7fa1590f8975b29db52f663c18f80f73c24705a0SQ&quot;
+2) &quot;hello world!&quot;
+2) 1) &quot;DI216f7fa1c33c8d99678f44b5658545f3f2603b8d05a0SQ&quot;
+2) &quot;good morning!&quot;
+3) 1) &quot;DI216f7fa1d137377120adaf571418aff559578b8a05a0SQ&quot;
+2) &quot;bye bye~&quot;
+
+disque&gt; QPEEK greeting -10                                  -- 按从新到旧的顺序返回任务
+1) 1) &quot;DI216f7fa1d137377120adaf571418aff559578b8a05a0SQ&quot;
+2) &quot;bye bye~&quot;
+2) 1) &quot;DI216f7fa1c33c8d99678f44b5658545f3f2603b8d05a0SQ&quot;
+2) &quot;good morning!&quot;
+3) 1) &quot;DI216f7fa1590f8975b29db52f663c18f80f73c24705a0SQ&quot;
+2) &quot;hello world!&quot;
+</pre></div>
+</div>
+</div>
+
 
           </div>
           
@@ -159,6 +194,15 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="show.html" class="btn btn-neutral float-right" title="SHOW" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="qlen.html" class="btn btn-neutral" title="QLEN" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +240,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +255,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

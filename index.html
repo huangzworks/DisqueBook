@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Disque 命令参考 &mdash; Disque 命令参考</title>
+  <title>Disque 使用教程 &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,8 @@
   
 
   
-    <link rel="top" title="Disque 命令参考" href="#"/> 
+    <link rel="top" title="Disque 使用教程" href="#"/>
+        <link rel="next" title="安装方法" href="install.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -47,7 +48,7 @@
         
 
         
-          <a href="#" class="icon icon-home"> Disque 命令参考
+          <a href="#" class="icon icon-home"> Disque 使用教程
         
 
         
@@ -69,7 +70,25 @@
         
           
           
-              <ul class="simple">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">安装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single-node.html">搭建单节点集群</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qpeek.html">QPEEK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="show.html">SHOW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ackjob.html">ACKJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastack.html">FASTACK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="info.html">INFO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello.html">HELLO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enqueue.html">ENQUEUE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dequeue.html">DEQUEUE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deljob.html">DELJOB</a></li>
 </ul>
 
           
@@ -83,7 +102,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">Disque 命令参考</a>
+        <a href="#">Disque 使用教程</a>
       </nav>
 
 
@@ -94,7 +113,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="#">Docs</a> &raquo;</li>
       
-    <li>Disque 命令参考</li>
+    <li>Disque 使用教程</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -108,26 +127,62 @@
           <div role="main" class="document">
             
   <div class="section" id="disque">
-<h1>Disque 命令参考<a class="headerlink" href="#disque" title="永久链接至标题">¶</a></h1>
+<h1>Disque 使用教程<a class="headerlink" href="#disque" title="永久链接至标题">¶</a></h1>
+<p>Disque 是一个内存储存的分布式任务队列实现，
+它由 Redis 的作者 Salvatore Sanfilippo (<a class="reference external" href="https://twitter.com/antirez">&#64;antirez</a>)开发，
+目前正处于预览版（alpha）阶段。</p>
+<p>本文档将对 Disque 的安装方法和运行方法进行介绍，
+说明各个 Disque 命令的作用，
+并给出各个命令的运行示例，
+帮助读者更好地理解 Disque 的使用方法。</p>
+<p>关于 Disque 项目的更多信息可以参考 Disque 项目的 GitHub 页面：
+<a class="reference external" href="https://github.com/antirez/disque">github.com/antirez/disque</a> 。</p>
+<div class="section" id="id1">
+<h2>安装与运行<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">安装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single-node.html">搭建单节点集群</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
 </ul>
 </div>
-<div class="section" id="id1">
-<h2>关于本文档<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
-<p>本文档由<a class="reference external" href="http://www.huangz.me/">黄健宏(huangz)</a>翻译，
-版权归 Disque 官方所有。</p>
+</div>
+<div class="section" id="id2">
+<h2>命令文档<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qpeek.html">QPEEK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="show.html">SHOW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ackjob.html">ACKJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastack.html">FASTACK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="info.html">INFO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello.html">HELLO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enqueue.html">ENQUEUE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dequeue.html">DEQUEUE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deljob.html">DELJOB</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>关于本文档<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>本文档由<a class="reference external" href="http://www.huangz.me/">黄健宏(huangz)</a>翻译并改写，
+翻译部分的版权归 Disque 官方所有，
+改写部分的版权归作者所有。</p>
 <p>追踪本文档的更新信息请关注本文档的 github 项目页面，
 或者关注译者的各个社交网站。
 有任何问题、意见或建议，
 请在文档下方的论坛里面留言，
 或者直接联系译者。</p>
 </div>
-<div class="section" id="id2">
-<h2>通过捐款支持本文档<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<div class="section" id="id4">
+<h2>通过捐款支持本文档<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
 <img alt="_images/huangz-payment-code.png" class="align-right" src="_images/huangz-payment-code.png" />
 <p>对文档进行翻译需要花费大量的时间和精力，
-如果你喜欢这个《Disque 命令参考》文档的话，
+如果你喜欢这个《Disque 使用教程》文档的话，
 欢迎通过捐款的方式，
 支持译者的翻译工作，
 非常感谢！</p>
@@ -161,6 +216,13 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="install.html" class="btn btn-neutral float-right" title="安装方法" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
   
 
   <hr/>

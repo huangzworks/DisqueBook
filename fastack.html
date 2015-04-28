@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>FASTACK &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="INFO" href="info.html"/>
+        <link rel="prev" title="ACKJOB" href="ackjob.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +57,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -75,14 +77,14 @@
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
 </ul>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qpeek.html">QPEEK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="show.html">SHOW</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ackjob.html">ACKJOB</a></li>
-<li class="toctree-l1"><a class="reference internal" href="fastack.html">FASTACK</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">FASTACK</a></li>
 <li class="toctree-l1"><a class="reference internal" href="info.html">INFO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hello.html">HELLO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="enqueue.html">ENQUEUE</a></li>
@@ -112,8 +114,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>FASTACK</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/fastack.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +127,27 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="fastack">
+<h1>FASTACK<a class="headerlink" href="#fastack" title="永久链接至标题">¶</a></h1>
+<div class="highlight-python"><div class="highlight"><pre>FASTACK jobid1 jobid2 ... jobidN
+</pre></div>
+</div>
+<p>尽最大努力在集群范围内对给定的任务进行删除。</p>
+<p>在网络连接良好并且所有节点都在线时，
+这个命令的效果和 <code class="docutils literal"><span class="pre">ACKJOB</span></code> 命令的效果一样，
+但是因为这个命令引发的消息交换比 <code class="docutils literal"><span class="pre">ACKJOB</span></code> 要少，
+所以它的速度比 <code class="docutils literal"><span class="pre">ACKJOB</span></code> 要快不少。</p>
+<p>但是当集群中包含了失效节点的时候，
+<code class="docutils literal"><span class="pre">FASTACK</span></code> 命令比 <code class="docutils literal"><span class="pre">ACKJOB</span></code> 命令更容易出现多次发送同一消息的情况。</p>
+<div class="highlight-python"><div class="highlight"><pre>disque&gt; ADDJOB greeting &quot;hello world!&quot; 0
+DI216f7fa1c513d73d69c968aa25d482c498f4c1f005a0SQ
 
-  
-  <div id="search-results">
-  
-  </div>
+disque&gt; FASTACK DI216f7fa1c513d73d69c968aa25d482c498f4c1f005a0SQ
+(integer) 1
+</pre></div>
+</div>
+</div>
+
 
           </div>
           
@@ -159,6 +173,15 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="info.html" class="btn btn-neutral float-right" title="INFO" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ackjob.html" class="btn btn-neutral" title="ACKJOB" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +219,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +234,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

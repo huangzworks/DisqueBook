@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>搜索 &mdash; Disque 使用教程</title>
+  <title>安装方法 &mdash; Disque 使用教程</title>
   
 
   
@@ -30,7 +30,9 @@
   
 
   
-    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="搭建单节点集群" href="single-node.html"/>
+        <link rel="prev" title="Disque 使用教程" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -55,7 +57,7 @@
 
         
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -69,8 +71,8 @@
         
           
           
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">安装方法</a></li>
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">安装方法</a></li>
 <li class="toctree-l1"><a class="reference internal" href="single-node.html">搭建单节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
@@ -112,8 +114,12 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li></li>
+    <li>安装方法</li>
       <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/install.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
   </ul>
@@ -121,19 +127,17 @@
 </div>
           <div role="main" class="document">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="id1">
+<h1>安装方法<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>以下是下载、编译并安装 Disque 的完整步骤：</p>
+<ol class="arabic simple">
+<li>执行命令 <code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/antirez/disque.git</span></code> ，使用 Git 克隆 Disque 的项目文件夹。</li>
+<li>执行 <code class="docutils literal"><span class="pre">cd</span> <span class="pre">disque</span></code> ，切换至 Disque 的项目文件夹。</li>
+<li>执行 <code class="docutils literal"><span class="pre">make</span></code> ，编译 Disque 。在编译好的文件里面， <code class="docutils literal"><span class="pre">disque-server</span></code> 文件是 Disque 的服务器程序，而 <code class="docutils literal"><span class="pre">disque</span></code> 文件则是 Disque 的客户端程序。</li>
+<li>可选：执行 <code class="docutils literal"><span class="pre">make</span> <span class="pre">test</span></code> ，测试编译好的 Disque 程序。</li>
+</ol>
+</div>
 
-  
-  <div id="search-results">
-  
-  </div>
 
           </div>
           
@@ -159,6 +163,15 @@
 </div>
           
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="single-node.html" class="btn btn-neutral float-right" title="搭建单节点集群" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Disque 使用教程" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -196,7 +209,6 @@
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
       <script type="text/javascript" src="_static/translations.js"></script>
-      <script type="text/javascript" src="_static/searchtools.js"></script>
 
   
 
@@ -212,14 +224,7 @@
           SphinxRtdTheme.StickyNav.enable();
       });
   </script>
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>
