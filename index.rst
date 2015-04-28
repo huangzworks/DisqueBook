@@ -26,17 +26,20 @@ TODO
 
    addjob
    getjob
+
+   qlen
+   qpeek
+   show
+
    ackjob
    fastack
 
    info
    hello
-   qlen
-   qpeek
+
    enqueue
    dequeue
    deljob
-   show
 
 .. 待实现命令
    qstat
