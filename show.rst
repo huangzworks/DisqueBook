@@ -9,7 +9,7 @@ SHOW
 
 ::
 
-    127.0.0.1:7711> SHOW DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ
+    disque> SHOW DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ
     1) "id"                                                 -- 任务 ID
     2) "DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ"
     3) "queue"                                              -- 所属队列
