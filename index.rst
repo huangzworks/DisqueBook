@@ -11,6 +11,7 @@ Disque 命令参考
 
    addjob
    getjob
+   ackjob
 
 
 关于本文档
