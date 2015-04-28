@@ -12,6 +12,18 @@ Disque 命令参考
    addjob
    getjob
    ackjob
+   fastack
+
+   info
+   hello
+   qlen
+   qstat
+   qpeek
+   enqueue
+   dequeue
+   deljob
+   show
+   scan
 
 
 关于本文档
