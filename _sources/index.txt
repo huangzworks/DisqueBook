@@ -26,9 +26,9 @@ Disque 是一个内存储存的分布式任务队列实现，
    :maxdepth: 2
 
    install
+   client
    single-node
    multi-nodes
-   client
 
 
 命令文档
