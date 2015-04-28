@@ -1,0 +1,6 @@
+QSTAT
+======
+
+::
+
+    QSTAT <qname>

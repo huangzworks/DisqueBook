@@ -17,12 +17,14 @@ Disque 命令参考
    info
    hello
    qlen
-   qstat
    qpeek
    enqueue
    dequeue
    deljob
    show
+
+.. 待实现命令
+   qstat
    scan
 
 
