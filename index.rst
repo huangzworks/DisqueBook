@@ -10,6 +10,7 @@ Disque 命令参考
    :maxdepth: 2
 
    addjob
+   getjob
 
 
 关于本文档
