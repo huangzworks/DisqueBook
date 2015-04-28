@@ -14,24 +14,24 @@ ACKJOB
 
 ::
 
-    127.0.0.1:7711> GETJOB FROM greeting                    -- 取出三个任务，然后确认其中两个已被执行
+    disque> GETJOB FROM greeting                    -- 取出三个任务，然后确认其中两个已被执行
     1) 1) "greeting"
     2) "DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ"
     3) "hello world!"
 
-    127.0.0.1:7711> GETJOB FROM greeting
+    disque> GETJOB FROM greeting
     1) 1) "greeting"
     2) "DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ"
     3) "good morning!"
 
-    127.0.0.1:7711> GETJOB FROM greeting
+    disque> GETJOB FROM greeting
     1) 1) "greeting"
     2) "DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ"
     3) "bye bye~"
 
-    127.0.0.1:7711> ACKJOB DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ
+    disque> ACKJOB DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ
     (integer) 1
 
-    127.0.0.1:7711> ACKJOB DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ
+    disque> ACKJOB DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ
     (integer) 1
 
