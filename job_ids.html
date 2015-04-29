@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ADDJOB &mdash; Disque 使用教程</title>
+  <title>任务 ID &mdash; Disque 使用教程</title>
   
 
   
@@ -31,8 +31,7 @@
 
   
     <link rel="top" title="Disque 使用教程" href="index.html"/>
-        <link rel="next" title="GETJOB" href="getjob.html"/>
-        <link rel="prev" title="搭建多节点集群" href="multi-nodes.html"/> 
+        <link rel="prev" title="DELJOB" href="deljob.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -77,8 +76,8 @@
 <li class="toctree-l1"><a class="reference internal" href="single-node.html">搭建单节点集群</a></li>
 <li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
 </ul>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">ADDJOB</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="qpeek.html">QPEEK</a></li>
@@ -91,8 +90,8 @@
 <li class="toctree-l1"><a class="reference internal" href="dequeue.html">DEQUEUE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deljob.html">DELJOB</a></li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">任务 ID</a></li>
 </ul>
 
           
@@ -117,11 +116,11 @@
   <ul class="wy-breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
       
-    <li>ADDJOB</li>
+    <li>任务 ID</li>
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/addjob.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/job_ids.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -130,82 +129,47 @@
 </div>
           <div role="main" class="document">
             
-  <div class="section" id="addjob">
-<h1>ADDJOB<a class="headerlink" href="#addjob" title="永久链接至标题">¶</a></h1>
-<div class="highlight-python"><div class="highlight"><pre>ADDJOB queue_name job &lt;ms-timeout&gt; [REPLICATE &lt;count&gt;] [DELAY &lt;sec&gt;] [RETRY &lt;sec&gt;] [TTL &lt;sec&gt;] [MAXLEN &lt;count&gt;] [ASYNC]
+  <div class="section" id="id">
+<h1>任务 ID<a class="headerlink" href="#id" title="永久链接至标题">¶</a></h1>
+<p>Disque 中的任务由类似这样的 ID 进行唯一标识： <code class="docutils literal"><span class="pre">DI0f0c644fd3ccb51c2cedbd47fcb6f312646c993c05a0SQ</span></code> 。</p>
+<p>每个任务 ID 总是以 <code class="docutils literal"><span class="pre">&quot;DI&quot;</span></code> 开头，并以 <code class="docutils literal"><span class="pre">&quot;SQ&quot;</span></code> 结束，
+而且总是由正好 48 个字符组成。</p>
+<p>任务 ID 可以被分为几个不同的部分：</p>
+<div class="highlight-python"><div class="highlight"><pre>DI | 0f0c644f | d3ccb51c2cedbd47fcb6f312646c993c | 05a0 | SQ
 </pre></div>
 </div>
-<p>将一个新任务添加到指定的队列里面。</p>
-<p>以下是各个参数的含义：</p>
-<ul class="simple">
-<li><code class="docutils literal"><span class="pre">queue_name</span></code> ：
-队列的名字，
-可以是任意字符串。
-如果指定的队列并不存在，
-那么它将被自动创建，
-用户无需手动创建队列。
-当队列没有任务可传递时，
-它也会自动被释放。</li>
-<li><code class="docutils literal"><span class="pre">job</span></code> ：
-使用字符串描述的任务。
-Disque 不关心任务的具体含义，
-对于它来说，
-一项任务就是一条待传送的消息。</li>
-<li><code class="docutils literal"><span class="pre">ms-timeout</span></code> ：
-毫秒精度的命令超时限制。
-如果用户没有使用 <code class="docutils literal"><span class="pre">ASYNC</span></code> 选项，
-并且在指定的毫秒数之内，
-任务的复制级别（replication level）未能达到指定的要求，
-那么命令将返回一个错误，
-而节点会尽可能地清理未发出的消息，
-并将遍布于整个集群的消息副本删除，
-但是任务仍然有可能会在之后被传递。
-在默认的服务器频率（hz）下，
-实际的超时解析度为 1/10 秒钟。</li>
-<li><code class="docutils literal"><span class="pre">REPLICATE</span> <span class="pre">count</span></code> ：
-指定任务需要复制至多少个节点。</li>
-<li><code class="docutils literal"><span class="pre">DELAY</span> <span class="pre">sec</span></code> ：
-指定任务在放入各个节点的队列之前，
-需要等待多少秒钟。</li>
-<li><code class="docutils literal"><span class="pre">RETRY</span> <span class="pre">sec</span></code> ：
-在未接到 <code class="docutils literal"><span class="pre">ACK</span></code> 回复的情况下，
-节点在多少秒钟之后才会重新将任务放入待传递的队列里面。
-如果 <code class="docutils literal"><span class="pre">sec</span></code> 参数的值为 <code class="docutils literal"><span class="pre">0</span></code> ，
-那么任务将以“最多一次”（at-most-once）的方式进行传递：
-这个任务不会被重新放入到待传递队列里面，
-并且它的复制因子（replication factor）也只会为 1 。</li>
-<li><code class="docutils literal"><span class="pre">TTL</span> <span class="pre">sec</span></code> ：
-秒级精度的任务生存时间。
-在生存时间消耗完毕之后，
-即使任务还未被成功传递，
-它也会被删除。</li>
-<li><code class="docutils literal"><span class="pre">MAXLEN</span> <span class="pre">count</span></code> ：
-指定队列最多可以存放多少个待传递的任务。
-在队列已满的情况下，
-尝试添加新任务将被拒绝，
-而客户端也会接收到一个错误。</li>
-<li><code class="docutils literal"><span class="pre">ASYNC</span></code> ：
-要求服务器让命令尽快返回，
-并在后台执行将任务复制至其他节点的工作。
-任务会尽快地被放入到队列里面，
-而在普通情况下，
-只有当任务已经被放入到队列里面的时候，
-客户端才会接收到正面的回复。</li>
-</ul>
-<p>当用户指定了 <code class="docutils literal"><span class="pre">ASYNC</span></code> 选项，
-或者任务已经被正确地复制到了指定数量的节点上面时，
-命令返回已入队任务的 ID ；
-否则命令返回错误。</p>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; ADDJOB greeting &quot;hello world!&quot; 0            -- 将任务放进队列里面
-DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ    -- 任务 ID
-
-disque&gt; ADDJOB greeting &quot;good morning!&quot; 0
-DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ
-
-disque&gt; ADDJOB greeting &quot;bye bye~&quot; 0
-DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ
+<p>以下是各个部分的含义：</p>
+<ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">DI</span></code> 是 ID 的前缀。</li>
+<li><code class="docutils literal"><span class="pre">0f0c644f</span></code> 是一个节点 ID 的前 8 个字节，正是这个 ID 所记录的节点创建了这个任务。</li>
+<li><code class="docutils literal"><span class="pre">d3ccb51c2cedbd47fcb6f312646c993c</span></code> 是以十六进制格式表示的、通过伪随机方式生成的 128 位 ID 。</li>
+<li><code class="docutils literal"><span class="pre">05a0</span></code> 是以分钟计算的任务生存时间。这个值使得任务 ID 可以安全地过期，即使节点并不知道任务的具体表示。</li>
+<li><code class="docutils literal"><span class="pre">SQ</span></code> 是 ID 的后缀。</li>
+</ol>
+<p>任务 ID 是 <code class="docutils literal"><span class="pre">ADDJOB</span></code> 命令在成功创建任务时的返回值，
+也是 <code class="docutils literal"><span class="pre">GETJOB</span></code> 输出的一部分，
+并且在任务已经交由工作进程（worker）处理完毕时，
+可以使用任务 ID 向 Disque 报告该任务已经完成。</p>
+<p>任务 ID 包含了一部分节点 ID ，
+这使得为给定队列处理任务的工作进程可以很容易地知道自己正在处理的任务是由哪个节点创建的，
+然后直接向该节点发送请求，
+这样可以避免将请求发送至其他无关的节点，
+从而提高效率。</p>
+<p>因为任务 ID 只是用了 32 个二进制位来储存节点 ID ，
+所以在包含 100 个节点的 Disque 集群里面，
+这个 32 位 ID 出现碰撞的几率可以通过生日悖论（birthday paradox）计算得出：</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">P</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">32</span><span class="p">)</span> <span class="o">=</span> <span class="o">.</span><span class="mo">000001164</span>
 </pre></div>
 </div>
+<p>在发生碰撞的情况下，
+工作进程可能会做出不高效的选择。</p>
+<p>任务 ID 中的 128 位随机生成 ID 几乎不可能出现碰撞，
+因为它是由以下方法计算得出的：</p>
+<div class="highlight-python"><div class="highlight"><pre>128 bit ID = SHA1(seed || counter)
+</pre></div>
+</div>
+<p>其中 <code class="docutils literal"><span class="pre">seed</span></code> 是服务器在启动时通过 <code class="docutils literal"><span class="pre">/dev/urandom</span></code> 生成的，
+而 <code class="docutils literal"><span class="pre">counter</span></code> 则是一个在每次生成 ID 时都会进行自增的计数器。</p>
 </div>
 
 
@@ -236,10 +200,8 @@ DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="getjob.html" class="btn btn-neutral float-right" title="GETJOB" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="multi-nodes.html" class="btn btn-neutral" title="搭建多节点集群" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="deljob.html" class="btn btn-neutral" title="DELJOB" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
