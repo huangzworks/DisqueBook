@@ -59,3 +59,27 @@ GETJOB
     disque> GETJOB TIMEOUT 5000 FROM greeting                   -- 命令在等待 5000 毫秒之后返回
     (nil)                                                       -- 未取得任何任务
     (5.09s)
+
+以下是使用 ``COUNT`` 选项一次返回多个任务的示例：
+
+::
+
+    disque> ADDJOB todo "finish homework" 0
+    DIb47e59860656f0cfccc59f79e468b5ef4516d6a605a0SQ
+
+    disque> ADDJOB todo "buy some milk" 0
+    DIb47e5986173aae4f703877e1f4afedade0ca82b205a0SQ
+
+    disque> ADDJOB todo "watch movie" 0
+    DIb47e59866f34f9a38b868c28fe305baa9c1f688105a0SQ
+
+    disque> GETJOB COUNT 3 FROM todo                            -- 一次返回三个任务
+    1) 1) "todo"                                                -- 第一项任务
+       2) "DIb47e59860656f0cfccc59f79e468b5ef4516d6a605a0SQ"
+       3) "finish homework"
+    2) 1) "todo"                                                -- 第二项任务
+       2) "DIb47e5986173aae4f703877e1f4afedade0ca82b205a0SQ"
+       3) "buy some milk"
+    3) 1) "todo"                                                -- 第三项任务
+       2) "DIb47e59866f34f9a38b868c28fe305baa9c1f688105a0SQ"
+       3) "watch movie"
