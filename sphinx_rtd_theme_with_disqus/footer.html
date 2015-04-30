@@ -12,6 +12,10 @@
 
   <hr/>
 
+  {% if theme_disqus_shortname %}
+    {% include "disqus.html" %}
+  {% endif %}
+
   <div role="contentinfo">
     <p>
     {%- if show_copyright %}
