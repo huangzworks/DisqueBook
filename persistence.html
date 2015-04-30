@@ -1,0 +1,224 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>数据持久化 &mdash; Disque 使用教程</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Disque 使用教程" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> Disque 使用教程
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">安装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single-node.html">搭建单节点集群</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qpeek.html">QPEEK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="show.html">SHOW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ackjob.html">ACKJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastack.html">FASTACK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="info.html">INFO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello.html">HELLO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enqueue.html">ENQUEUE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dequeue.html">DEQUEUE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deljob.html">DELJOB</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Disque 使用教程</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>数据持久化</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/persistence.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="id1">
+<h1>数据持久化<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>Disque 可以只依靠内存运行，
+并通过同步复制保证耐久性（durability），
+不过在有需要的情况下，
+它也可以通过 AOF （Append Only File）持久化将任务的创建和销毁以日志的方式记录到硬盘里面，
+并在重启时载入这些日志。</p>
+<p>当 Disque 运行在一个单点可用区域里面，
+而所有节点都可能在一次大规模的重启事件中全部下线时，
+那么推荐使用 AOF 持久化。</p>
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  
+    <div class="section" id="discuss">
+    <h2>
+        论坛
+        <a class="headerlink" href="#discuss" title="永久链接至标题">¶</a>
+    </h2>
+    <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'disquebook'; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+
+  <div role="contentinfo">
+    <p>
+        &copy; 版权所有 2015, 黄健宏(huangz).
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/translations.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
