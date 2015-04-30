@@ -19,3 +19,5 @@ Disque 在源码中附带了命令行客户端程序 ``disque`` ，
 - Python 客户端 https://github.com/ryansb/disq
 
 - Go 客户端 `disque-go <https://github.com/zencoder/disque-go>`_ 以及 `go-disque <https://github.com/EverythingMe/go-disque/>`_
+
+- Erlang 客户端 https://github.com/nacmartin/edisque
