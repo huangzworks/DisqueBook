@@ -9,6 +9,6 @@
 
 3. 执行 ``make`` 命令，编译 Disque 。
 
-4. 执行 ``cd src`` 命令，进入到 ``src`` 文件夹，里面有编译好的 Disque 服务器文件 ``disque-server`` 和 Disque 客户端文件 ``disque`` 。
+4. 可选：执行 ``make test`` ，测试刚刚编译好的 Disque 程序。
 
-5. 可选：执行 ``make test`` ，测试编译好的 Disque 程序。
+5. 执行 ``cd src`` 命令，进入 ``src`` 文件夹，里面有编译好的 Disque 服务器文件 ``disque-server`` 和 Disque 客户端文件 ``disque`` 。
