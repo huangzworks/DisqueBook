@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -132,7 +142,7 @@
             
   <div class="section" id="fastack">
 <h1>FASTACK<a class="headerlink" href="#fastack" title="永久链接至标题">¶</a></h1>
-<div class="highlight-python"><div class="highlight"><pre>FASTACK jobid1 jobid2 ... jobidN
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">FASTACK</span> <span class="n">jobid1</span> <span class="n">jobid2</span> <span class="o">...</span> <span class="n">jobidN</span>
 </pre></div>
 </div>
 <p>尽最大努力在集群范围内对给定的任务进行删除。</p>
@@ -142,11 +152,11 @@
 所以它的速度比 <code class="docutils literal"><span class="pre">ACKJOB</span></code> 要快不少。</p>
 <p>但是当集群中包含了失效节点的时候，
 <code class="docutils literal"><span class="pre">FASTACK</span></code> 命令比 <code class="docutils literal"><span class="pre">ACKJOB</span></code> 命令更容易出现多次发送同一消息的情况。</p>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; ADDJOB greeting &quot;hello world!&quot; 0
-DI216f7fa1c513d73d69c968aa25d482c498f4c1f005a0SQ
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">hello world!&quot;</span> <span class="mi">0</span>
+<span class="n">DI216f7fa1c513d73d69c968aa25d482c498f4c1f005a0SQ</span>
 
-disque&gt; FASTACK DI216f7fa1c513d73d69c968aa25d482c498f4c1f005a0SQ
-(integer) 1
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">FASTACK</span> <span class="n">DI216f7fa1c513d73d69c968aa25d482c498f4c1f005a0SQ</span>
+<span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>
 </pre></div>
 </div>
 </div>

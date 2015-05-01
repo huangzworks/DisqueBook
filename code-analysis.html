@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Disque 源码分析 &mdash; Disque 使用教程</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="prev" title="任务 ID" href="job_ids.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> Disque 使用教程
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">安装方法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client.html">客户端</a></li>
+<li class="toctree-l1"><a class="reference internal" href="single-node.html">搭建单节点集群</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi-nodes.html">搭建多节点集群</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="addjob.html">ADDJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getjob.html">GETJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qlen.html">QLEN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qpeek.html">QPEEK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="show.html">SHOW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ackjob.html">ACKJOB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fastack.html">FASTACK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="info.html">INFO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello.html">HELLO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enqueue.html">ENQUEUE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dequeue.html">DEQUEUE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deljob.html">DELJOB</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">结论</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Disque 使用教程</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Disque 源码分析</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/code-analysis.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="disque">
+<h1>Disque 源码分析<a class="headerlink" href="#disque" title="永久链接至标题">¶</a></h1>
+<p>本文将对 Disque 的核心数据结构进行介绍，
+并在最后通过分析 <code class="docutils literal"><span class="pre">ADDJOB</span></code> 命令的实现来帮助大家了解 Disque 的运作原理。</p>
+<p>因为时间关系，
+本章只介绍了 Disque 源码中最重点的部分，
+并且只对集群和命令的运作原理进行了最基本的介绍，
+但对于有兴趣深入了解 Disque 源码的读者来说，
+应该是一个还不错的入门向导。</p>
+<div class="section" id="id1">
+<h2>代码重用<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>Disque 重用了大量 Redis 的底层代码，
+比如数据结构部分、事件部分、网络通信部分、服务器主循环部分等等。</p>
+<p>这不是 antirez 第一次做这种事 ——
+更早出现的 Redis Sentinel 也大量地重用了 Redis 的代码，
+并在这个基础上，
+提供了一集不同的命令，
+用于监视 Redis 服务器。
+但从代码的角度来说，
+Redis Sentinel 实际上就是一个修改版的 Redis 。</p>
+<p>可以说，
+Disque 和 Redis Sentinel 都把 Redis 中的一些子系统当做一个框架来使用，
+特别是 Redis 中的网络通信部分，
+尤为如此。</p>
+<p>因为以上原因，
+熟悉 Redis 代码的人阅读 Disque 的代码应该会比较容易上手。</p>
+<p>对于熟悉 Redis 的人来说，
+阅读 Disque 代码主要应该关注以下几个文件：</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">disque.h</span></code> &amp; <code class="docutils literal"><span class="pre">disque.c</span></code> ，Disque 的队列实现。</li>
+<li><code class="docutils literal"><span class="pre">job.h</span></code> &amp; <code class="docutils literal"><span class="pre">job.c</span></code> ，Disque 的任务实现。</li>
+<li><code class="docutils literal"><span class="pre">disque.h</span></code> &amp; <code class="docutils literal"><span class="pre">disque.c</span></code> ，Disque 的服务器进程，相当于 Redis 中的 <code class="docutils literal"><span class="pre">redis.h</span></code> 和 <code class="docutils literal"><span class="pre">redis.c</span></code> ，但进行了相应的修改。</li>
+<li><code class="docutils literal"><span class="pre">cluster.h</span></code> &amp; <code class="docutils literal"><span class="pre">cluster.c</span></code> ，Disque 集群在 Redis 集群的基础上进行了一些修改，但基本的运作方式是相同的。</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>服务器状态<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>Disque 的服务器状态由 <code class="docutils literal"><span class="pre">disque.h/disqueServer</span></code> 结构表示，
+其中的 <code class="docutils literal"><span class="pre">jobs</span></code> 属性和 <code class="docutils literal"><span class="pre">queues</span></code> 属性分别记录了储存在服务器里面的所有任务和所有队列：</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="k">struct</span> <span class="n">disqueServer</span> <span class="p">{</span>
+
+    <span class="c1">// 其他属性……</span>
+
+    <span class="cm">/* Jobs &amp; Queues */</span>
+
+    <span class="c1">// jobs 是一个字典，它包含了服务器储存的所有任务</span>
+    <span class="c1">// 其中字典的键为任务 ID ，而键对应的值则是一个 job.h/job 结构</span>
+    <span class="n">dict</span> <span class="o">*</span><span class="n">jobs</span><span class="p">;</span>                 <span class="cm">/* Main jobs hash table, by job ID. */</span>
+
+    <span class="c1">// queues 也是一个字典，它包含了服务器储存的所有队列</span>
+    <span class="c1">// 其中字典的键为队列的名字，而键对应的则是一个 queue.h/queue 结构</span>
+    <span class="n">dict</span> <span class="o">*</span><span class="n">queues</span><span class="p">;</span>               <span class="cm">/* Main queues hash table, by queue name. */</span>
+
+    <span class="c1">// 其他属性……</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>接下来，
+就让我们来看看 <code class="docutils literal"><span class="pre">job</span></code> 结构的定义和 <code class="docutils literal"><span class="pre">queue</span></code> 结构的定义。</p>
+</div>
+<div class="section" id="id3">
+<h2>队列<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>Disque 中的每个队列都由一个 <code class="docutils literal"><span class="pre">queue.h/queue</span></code> 结构定义：</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="k">typedef</span> <span class="k">struct</span> <span class="n">queue</span> <span class="p">{</span>
+
+    <span class="c1">// 队列的名字</span>
+    <span class="n">robj</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>      <span class="cm">/* Queue name as a string object. */</span>
+
+    <span class="c1">// 一个跳跃表，储存了所有被放进队列里面的任务</span>
+    <span class="c1">// 各个任务按照任务 ID 从小到大有序地进行排列</span>
+    <span class="n">skiplist</span> <span class="o">*</span><span class="n">sl</span><span class="p">;</span>    <span class="cm">/* The skiplist with the queued jobs. */</span>
+
+    <span class="c1">// 其他属性……</span>
+
+<span class="p">}</span> <span class="n">queue</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>在了解了队列结构之后，
+接下来让我们看看 Disque 是怎样表示每个任务的。</p>
+</div>
+<div class="section" id="id4">
+<h2>任务<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p>Disque 中的每个任务都由一个 <code class="docutils literal"><span class="pre">job.h/job.h</span></code> 结构定义：</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="k">typedef</span> <span class="k">struct</span> <span class="n">job</span> <span class="p">{</span>
+
+    <span class="c1">// 任务 ID</span>
+    <span class="kt">char</span> <span class="n">id</span><span class="p">[</span><span class="n">JOB_ID_LEN</span><span class="p">];</span>    <span class="cm">/* Job ID. */</span>
+
+    <span class="c1">// 其他属性……</span>
+
+    <span class="c1">// 所属的队列</span>
+    <span class="n">robj</span> <span class="o">*</span><span class="n">queue</span><span class="p">;</span>            <span class="cm">/* Job queue name. */</span>
+
+    <span class="c1">// 任务的内容</span>
+    <span class="n">sds</span> <span class="n">body</span><span class="p">;</span>               <span class="cm">/* Body, or NULL if job is just an ACK. */</span>
+
+    <span class="c1">// 其他属性……</span>
+
+<span class="p">}</span> <span class="n">job</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>节点与集群<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
+<p>Disque 集群的工作方式和 Redis 集群的工作方式非常相似，
+但是不同于 Redis 能够自由选择单机模式（standalone mode）或者集群模式（cluster mode），
+Disque 总是运行在集群模式之下 ——
+当一个 Disque 服务器启动时，
+它就是一个 Disque 集群的节点（node）了。</p>
+<p>Disque 集群部分的代码记录在 <code class="docutils literal"><span class="pre">cluster.h</span></code> 和 <code class="docutils literal"><span class="pre">cluster.c</span></code> 里面，
+运作机制和 Redis 的集群模式并无太大区别。
+Disque 的主要作用就是在多个节点之间传播和复制任务，
+当一个节点执行用户的 <code class="docutils literal"><span class="pre">ADDJOB</span></code> 命令，
+将一个新任务添加到自己内部的队列里面的同时，
+它会将这个新任务以同步或者异步的方式（默认同步，可以通过 <code class="docutils literal"><span class="pre">ASYNC</span></code> 选择异步），
+传播给集群中的其他节点，
+而这种传播是通过发送集群消息（cluster message）来完成的。</p>
+<p>以下是 Disque 集群用于传播任务、任务 ID 以及任务请求的集群消息数据结构：</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="c1">// 传播任务及其内容</span>
+<span class="cm">/* This data section is used in different message types where we need to</span>
+<span class="cm"> * transmit one or multiple full jobs.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Used by: ADDJOB, YOURJOBS. */</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="kt">uint32_t</span> <span class="n">numjobs</span><span class="p">;</span>   <span class="cm">/* Number of jobs stored here. */</span>
+    <span class="kt">uint32_t</span> <span class="n">datasize</span><span class="p">;</span>  <span class="cm">/* Number of bytes following to describe jobs. */</span>
+    <span class="cm">/* The variable data section here is composed of 4 bytes little endian</span>
+<span class="cm">     * prefixed length + serialized job data for each job:</span>
+<span class="cm">     * [4 bytes len] + [serialized job] + [4 bytes len] + [serialized job] ...</span>
+<span class="cm">     * For a total of exactly &#39;datasize&#39; bytes. */</span>
+     <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">jobs_data</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span> <span class="cm">/* Defined as 8 bytes just for alignment. */</span>
+<span class="p">}</span> <span class="n">clusterMsgDataJob</span><span class="p">;</span>
+
+<span class="c1">// 传播任务 ID</span>
+<span class="cm">/* This data section is used when we need to send just a job ID.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Used by: GOTJOB, SETACK, and many more. */</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">id</span><span class="p">[</span><span class="n">JOB_ID_LEN</span><span class="p">];</span>
+    <span class="kt">uint32_t</span> <span class="n">aux</span><span class="p">;</span> <span class="cm">/* Optional field:</span>
+<span class="cm">                     For SETACK: Number of nodes that may have this message.</span>
+<span class="cm">                     For QUEUEJOB: Delay starting from msg reception. */</span>
+<span class="p">}</span> <span class="n">clusterMsgDataJobID</span><span class="p">;</span>
+
+<span class="c1">// 向其他节点请求传播某个队列的任务</span>
+<span class="cm">/* This data section is used by NEEDJOBS to specify in what queue we need</span>
+<span class="cm"> * a job, and how many jobs we request. */</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="kt">uint32_t</span> <span class="n">count</span><span class="p">;</span>     <span class="cm">/* How many jobs we request. */</span>
+    <span class="kt">uint32_t</span> <span class="n">qnamelen</span><span class="p">;</span>  <span class="cm">/* Queue name total length. */</span>
+    <span class="kt">char</span> <span class="n">qname</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>      <span class="cm">/* Defined as 8 bytes just for alignment. */</span>
+<span class="p">}</span> <span class="n">clusterMsgDataNeedJobs</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>命令执行流程<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+<p>在简单地了解了 Disque 的各个主要数据结构之后，
+让我们对 <code class="docutils literal"><span class="pre">ADDJOB</span></code> 命令的实现代码进行分析，
+并通过追踪这个命令的执行流程来了解 Disque 是怎样创建、储存并向其他节点传播一个任务的：</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="kt">void</span> <span class="nf">addjobCommand</span><span class="p">(</span><span class="n">client</span> <span class="o">*</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="c1">// 变量声明</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">replicate</span> <span class="o">=</span> <span class="n">server</span><span class="p">.</span><span class="n">cluster</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="o">?</span> <span class="mi">3</span> <span class="o">:</span> <span class="n">server</span><span class="p">.</span><span class="n">cluster</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">ttl</span> <span class="o">=</span> <span class="mi">3600</span><span class="o">*</span><span class="mi">24</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">retry</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">maxlen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="cm">/* Max queue length for job to be accepted. */</span>
+    <span class="kt">mstime_t</span> <span class="n">timeout</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="n">retval</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">async</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="cm">/* Asynchronous request? */</span>
+    <span class="kt">int</span> <span class="n">extrepl</span> <span class="o">=</span> <span class="n">getMemoryWarningLevel</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="cm">/* Replicate externally? */</span>
+    <span class="k">static</span> <span class="kt">uint64_t</span> <span class="n">prev_ctime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="c1">// 参数分析</span>
+    <span class="cm">/* Parse args. */</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">argc</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="o">*</span><span class="n">opt</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">lastarg</span> <span class="o">=</span> <span class="n">j</span> <span class="o">==</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">argc</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcasecmp</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span><span class="s">&quot;replicate&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">lastarg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">retval</span> <span class="o">=</span> <span class="n">getLongLongFromObject</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="o">&amp;</span><span class="n">replicate</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">retval</span> <span class="o">!=</span> <span class="n">DISQUE_OK</span> <span class="o">||</span> <span class="n">replicate</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">replicate</span> <span class="o">&gt;</span> <span class="mi">65535</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">addReplyError</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s">&quot;REPLICATE must be between 1 and 65535&quot;</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcasecmp</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span><span class="s">&quot;ttl&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">lastarg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">retval</span> <span class="o">=</span> <span class="n">getLongLongFromObject</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="o">&amp;</span><span class="n">ttl</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">retval</span> <span class="o">!=</span> <span class="n">DISQUE_OK</span> <span class="o">||</span> <span class="n">ttl</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">addReplyError</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s">&quot;TTL must be a number &gt; 0&quot;</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcasecmp</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span><span class="s">&quot;retry&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">lastarg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">retval</span> <span class="o">=</span> <span class="n">getLongLongFromObject</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="o">&amp;</span><span class="n">retry</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">retval</span> <span class="o">!=</span> <span class="n">DISQUE_OK</span> <span class="o">||</span> <span class="n">retry</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">addReplyError</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s">&quot;RETRY time must be a non negative number&quot;</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcasecmp</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span><span class="s">&quot;delay&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">lastarg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">retval</span> <span class="o">=</span> <span class="n">getLongLongFromObject</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="o">&amp;</span><span class="n">delay</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">retval</span> <span class="o">!=</span> <span class="n">DISQUE_OK</span> <span class="o">||</span> <span class="n">delay</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">addReplyError</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s">&quot;DELAY time must be a non negative number&quot;</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcasecmp</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span><span class="s">&quot;maxlen&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">lastarg</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">retval</span> <span class="o">=</span> <span class="n">getLongLongFromObject</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="o">&amp;</span><span class="n">maxlen</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">retval</span> <span class="o">!=</span> <span class="n">DISQUE_OK</span> <span class="o">||</span> <span class="n">maxlen</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">addReplyError</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s">&quot;MAXLEN must be a positive number&quot;</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcasecmp</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span><span class="s">&quot;async&quot;</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">async</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">addReply</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">shared</span><span class="p">.</span><span class="n">syntaxerr</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Parse the timeout argument. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">getTimeoutFromObjectOrReply</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="o">&amp;</span><span class="n">timeout</span><span class="p">,</span><span class="n">UNIT_MILLISECONDS</span><span class="p">)</span>
+        <span class="o">!=</span> <span class="n">DISQUE_OK</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+    <span class="cm">/* REPLICATE &gt; 1 and RETRY set to 0 does not make sense, why to replicate</span>
+<span class="cm">     * the job if it will never try to be re-queued if case the job processing</span>
+<span class="cm">     * is not acknowledged? */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">replicate</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">retry</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">addReplyError</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s">&quot;With RETRY set to 0 please explicitly set  &quot;</span>
+                        <span class="s">&quot;REPLICATE to 1 (at-most-once delivery)&quot;</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* DELAY greater or equal to TTL is silly. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">delay</span> <span class="o">&gt;=</span> <span class="n">ttl</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">addReplyError</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s">&quot;The specified DELAY is greater than TTL. Job refused &quot;</span>
+                        <span class="s">&quot;since would never be delivered&quot;</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* When retry is not specified, it defaults to 1/10 of the TTL. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">retry</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">retry</span> <span class="o">=</span> <span class="n">ttl</span><span class="o">/</span><span class="mi">10</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">retry</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">retry</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Check if REPLICATE can&#39;t be honoured at all. */</span>
+    <span class="kt">int</span> <span class="n">additional_nodes</span> <span class="o">=</span> <span class="n">extrepl</span> <span class="o">?</span> <span class="nl">replicate</span> <span class="p">:</span> <span class="n">replicate</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">additional_nodes</span> <span class="o">&gt;</span> <span class="n">server</span><span class="p">.</span><span class="n">cluster</span><span class="o">-&gt;</span><span class="n">reachable_nodes_count</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">extrepl</span> <span class="o">&amp;&amp;</span>
+            <span class="n">additional_nodes</span><span class="o">-</span><span class="mi">1</span> <span class="o">==</span> <span class="n">server</span><span class="p">.</span><span class="n">cluster</span><span class="o">-&gt;</span><span class="n">reachable_nodes_count</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">addReplySds</span><span class="p">(</span><span class="n">c</span><span class="p">,</span>
+                <span class="n">sdsnew</span><span class="p">(</span><span class="s">&quot;-NOREPL Not enough reachable nodes &quot;</span>
+                       <span class="s">&quot;for the requested replication level, since I&#39;m unable &quot;</span>
+                       <span class="s">&quot;to hold a copy of the message for memory usage &quot;</span>
+                       <span class="s">&quot;problems.</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">));</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">addReplySds</span><span class="p">(</span><span class="n">c</span><span class="p">,</span>
+                <span class="n">sdsnew</span><span class="p">(</span><span class="s">&quot;-NOREPL Not enough reachable nodes &quot;</span>
+                       <span class="s">&quot;for the requested replication level</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 检查队列是否已经达到最大长度</span>
+    <span class="cm">/* If maxlen was specified, check that the local queue len is</span>
+<span class="cm">     * within the requested limits. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">maxlen</span> <span class="o">&amp;&amp;</span> <span class="n">queueNameLength</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="n">maxlen</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">addReplySds</span><span class="p">(</span><span class="n">c</span><span class="p">,</span>
+            <span class="n">sdsnew</span><span class="p">(</span><span class="s">&quot;-MAXLEN Queue is already longer than &quot;</span>
+                   <span class="s">&quot;the specified MAXLEN count</span><span class="se">\r\n</span><span class="s">&quot;</span><span class="p">));</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 创建一个新任务</span>
+    <span class="cm">/* Create a new job. */</span>
+    <span class="n">job</span> <span class="o">*</span><span class="n">job</span> <span class="o">=</span> <span class="n">createJob</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="n">JOB_STATE_WAIT_REPL</span><span class="p">,</span><span class="n">ttl</span><span class="p">);</span> <span class="c1">// 创建任务</span>
+    <span class="n">job</span><span class="o">-&gt;</span><span class="n">queue</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>                            <span class="c1">// 记录任务所在队列的名字</span>
+    <span class="n">incrRefCount</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="n">job</span><span class="o">-&gt;</span><span class="n">repl</span> <span class="o">=</span> <span class="n">replicate</span><span class="p">;</span>
+
+    <span class="cm">/* If no external replication is used, add myself to the list of nodes</span>
+<span class="cm">     * that have a copy of the job. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">extrepl</span><span class="p">)</span>
+        <span class="n">dictAdd</span><span class="p">(</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">nodes_delivered</span><span class="p">,</span><span class="n">myself</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="n">myself</span><span class="p">);</span>
+
+    <span class="c1">// 设置任务的各项属性</span>
+    <span class="cm">/* Job ctime is milliseconds * 1000000. Jobs created in the same</span>
+<span class="cm">     * millisecond gets an incremental ctime. The ctime is used to sort</span>
+<span class="cm">     * queues, so we have some weak sorting semantics for jobs: non-requeued</span>
+<span class="cm">     * jobs are delivered roughly in the order they are added into a given</span>
+<span class="cm">     * node. */</span>
+    <span class="n">job</span><span class="o">-&gt;</span><span class="n">ctime</span> <span class="o">=</span> <span class="n">mstime</span><span class="p">()</span><span class="o">*</span><span class="mi">1000000</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">ctime</span> <span class="o">&lt;=</span> <span class="n">prev_ctime</span><span class="p">)</span> <span class="n">job</span><span class="o">-&gt;</span><span class="n">ctime</span> <span class="o">=</span> <span class="n">prev_ctime</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">prev_ctime</span> <span class="o">=</span> <span class="n">job</span><span class="o">-&gt;</span><span class="n">ctime</span><span class="p">;</span>
+
+    <span class="n">job</span><span class="o">-&gt;</span><span class="n">etime</span> <span class="o">=</span> <span class="n">server</span><span class="p">.</span><span class="n">unixtime</span> <span class="o">+</span> <span class="n">ttl</span><span class="p">;</span>
+    <span class="n">job</span><span class="o">-&gt;</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span><span class="p">;</span>
+    <span class="n">job</span><span class="o">-&gt;</span><span class="n">retry</span> <span class="o">=</span> <span class="n">retry</span><span class="p">;</span>
+    <span class="n">job</span><span class="o">-&gt;</span><span class="n">body</span> <span class="o">=</span> <span class="n">sdsdup</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">);</span>
+
+    <span class="cm">/* Set the next time the job will be queued. Note that once we call</span>
+<span class="cm">     * enqueueJob() the first time, this will be set to 0 (never queue</span>
+<span class="cm">     * again) for jobs that have a zero retry value (at most once jobs). */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">delay</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">job</span><span class="o">-&gt;</span><span class="n">qtime</span> <span class="o">=</span> <span class="n">server</span><span class="p">.</span><span class="n">mstime</span> <span class="o">+</span> <span class="n">delay</span><span class="o">*</span><span class="mi">1000</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="cm">/* This will be updated anyway by enqueueJob(). */</span>
+        <span class="n">job</span><span class="o">-&gt;</span><span class="n">qtime</span> <span class="o">=</span> <span class="n">server</span><span class="p">.</span><span class="n">mstime</span> <span class="o">+</span> <span class="n">retry</span><span class="o">*</span><span class="mi">1000</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Register the job locally in all the cases but when the job</span>
+<span class="cm">     * is externally replicated and asynchronous replicated at the same</span>
+<span class="cm">     * time: in this case we don&#39;t want to take a local copy at all. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">async</span> <span class="o">&amp;&amp;</span> <span class="n">extrepl</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">registerJob</span><span class="p">(</span><span class="n">job</span><span class="p">)</span> <span class="o">==</span> <span class="n">DISQUE_ERR</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/* A job ID with the same name? Practically impossible but</span>
+<span class="cm">         * let&#39;s handle it to trap possible bugs in a cleaner way. */</span>
+        <span class="n">serverLog</span><span class="p">(</span><span class="n">DISQUE_WARNING</span><span class="p">,</span><span class="s">&quot;ID already existing in ADDJOB command!&quot;</span><span class="p">);</span>
+        <span class="n">freeJob</span><span class="p">(</span><span class="n">job</span><span class="p">);</span>
+        <span class="n">addReplyError</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s">&quot;Internal error creating the job, check server logs&quot;</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* For replicated messages where ASYNC option was not asked, block</span>
+<span class="cm">     * the client, and wait for acks. Otherwise if no synchronous replication</span>
+<span class="cm">     * is used, or ASYNC option was enabled, we just queue the job and</span>
+<span class="cm">     * return to the client ASAP.</span>
+<span class="cm">     *</span>
+<span class="cm">     * Note that for REPLICATE &gt; 1 and ASYNC the replication process is</span>
+<span class="cm">     * best effort. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">replicate</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">async</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// 决定以同步方式向其他节点传播这个任务</span>
+
+        <span class="n">c</span><span class="o">-&gt;</span><span class="n">bpop</span><span class="p">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span><span class="p">;</span>
+        <span class="n">c</span><span class="o">-&gt;</span><span class="n">bpop</span><span class="p">.</span><span class="n">job</span> <span class="o">=</span> <span class="n">job</span><span class="p">;</span>
+        <span class="n">c</span><span class="o">-&gt;</span><span class="n">bpop</span><span class="p">.</span><span class="n">added_node_time</span> <span class="o">=</span> <span class="n">server</span><span class="p">.</span><span class="n">mstime</span><span class="p">;</span>
+        <span class="n">blockClient</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">DISQUE_BLOCKED_JOB_REPL</span><span class="p">);</span>
+        <span class="n">setJobAssociatedValue</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+        <span class="cm">/* Create the nodes_confirmed dictionary only if we actually need</span>
+<span class="cm">         * it for synchronous replication. It will be released later</span>
+<span class="cm">         * when we move away from JOB_STATE_WAIT_REPL. */</span>
+        <span class="n">job</span><span class="o">-&gt;</span><span class="n">nodes_confirmed</span> <span class="o">=</span> <span class="n">dictCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">clusterNodesDictType</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span>
+        <span class="cm">/* Confirm itself as an acknowledged receiver if this node will</span>
+<span class="cm">         * retain a copy of the job. */</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">extrepl</span><span class="p">)</span> <span class="n">dictAdd</span><span class="p">(</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">nodes_confirmed</span><span class="p">,</span><span class="n">myself</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="n">myself</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+
+        <span class="c1">// 决定以异步方式传递这个任务</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">delay</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">extrepl</span><span class="p">)</span> <span class="n">enqueueJob</span><span class="p">(</span><span class="n">job</span><span class="p">);</span> <span class="cm">/* Will change the job state. */</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="cm">/* Delayed jobs that don&#39;t wait for replication can move</span>
+<span class="cm">             * forward to ACTIVE state ASAP, and get scheduled for</span>
+<span class="cm">             * queueing. */</span>
+            <span class="n">job</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">=</span> <span class="n">JOB_STATE_ACTIVE</span><span class="p">;</span>
+            <span class="n">updateJobAwakeTime</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">addReplyJobID</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">job</span><span class="p">);</span>
+        <span class="n">AOFLoadJob</span><span class="p">(</span><span class="n">job</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 向其他节点传播这个任务……</span>
+
+    <span class="cm">/* If the replication factor is &gt; 1, send REPLJOB messages to REPLICATE-1</span>
+<span class="cm">     * nodes. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">additional_nodes</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">clusterReplicateJob</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">additional_nodes</span><span class="p">,</span> <span class="n">async</span><span class="p">);</span>
+
+    <span class="cm">/* If the job is asynchronously and externally replicated at the same time,</span>
+<span class="cm">     * send a QUEUE message ASAP to one random node, and delete the job from</span>
+<span class="cm">     * this node right now. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">async</span> <span class="o">&amp;&amp;</span> <span class="n">extrepl</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dictEntry</span> <span class="o">*</span><span class="n">de</span> <span class="o">=</span> <span class="n">dictGetRandomKey</span><span class="p">(</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">nodes_delivered</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">de</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">clusterNode</span> <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="n">dictGetVal</span><span class="p">(</span><span class="n">de</span><span class="p">);</span>
+            <span class="n">clusterSendEnqueue</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">job</span><span class="p">,</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">delay</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="cm">/* We don&#39;t have to unregister the job since we did not registered</span>
+<span class="cm">         * it if it&#39;s async + extrepl. */</span>
+        <span class="n">freeJob</span><span class="p">(</span><span class="n">job</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>总的来说，
+<code class="docutils literal"><span class="pre">ADDJOB</span></code> 命令要做的就是以下几件事情：</p>
+<ol class="arabic simple">
+<li>创建一个新的 <code class="docutils literal"><span class="pre">job</span></code> 结构，并将用户给定的任务信息记录起来。</li>
+<li>查找用户指定的队列，如果找到就检查它是否超出了最大长度，如果未超长，那么就将任务添加到队列中；如果队列未创建，那么创建队列。</li>
+<li>以同步或者异步的方式，通过集群消息将这个任务传播给集群中的其他节点。</li>
+</ol>
+</div>
+<div class="section" id="id7">
+<h2>结论<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h2>
+<p>总的来说，
+Disque 对于 Redis 的变动并不大，
+而且新添加的内容也不难读懂，
+如果你也想要一窥 Disque 这个新的分布式任务队列实现，
+那么不要犹豫，
+赶紧去读读 Disque 的代码吧！</p>
+<div class="line-block">
+<div class="line">huangz</div>
+<div class="line">2015.5.1</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="job_ids.html" class="btn btn-neutral" title="任务 ID" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  
+    <div class="section" id="discuss">
+    <h2>
+        论坛
+        <a class="headerlink" href="#discuss" title="永久链接至标题">¶</a>
+    </h2>
+    <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'disquebook'; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+
+  <div role="contentinfo">
+    <p>
+        &copy; 版权所有 2015, 黄健宏(huangz).
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="_static/translations.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

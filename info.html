@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -133,71 +143,71 @@
   <div class="section" id="info">
 <h1>INFO<a class="headerlink" href="#info" title="永久链接至标题">¶</a></h1>
 <p>返回节点信息和统计数据。</p>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; INFO
-# Server
-disque_version:0.0.1
-disque_git_sha1:0bbd831e
-disque_git_dirty:0
-disque_build_id:cd264e0f87773cd5
-os:Darwin 13.3.0 x86_64
-arch_bits:64
-multiplexing_api:kqueue
-gcc_version:4.2.1
-process_id:528
-run_id:4b4aff36750579760e62d213a311ff7202560caa
-tcp_port:7711
-uptime_in_seconds:374
-uptime_in_days:0
-hz:10
-config_file:
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">disque</span><span class="o">&gt;</span> <span class="n">INFO</span>
+<span class="o">#</span> <span class="n">Server</span>
+<span class="n">disque_version</span><span class="p">:</span><span class="mf">0.0.1</span>
+<span class="n">disque_git_sha1</span><span class="p">:</span><span class="mi">0</span><span class="n">bbd831e</span>
+<span class="n">disque_git_dirty</span><span class="p">:</span><span class="mi">0</span>
+<span class="n">disque_build_id</span><span class="p">:</span><span class="n">cd264e0f87773cd5</span>
+<span class="n">os</span><span class="p">:</span><span class="n">Darwin</span> <span class="mf">13.3.0</span> <span class="n">x86_64</span>
+<span class="n">arch_bits</span><span class="p">:</span><span class="mi">64</span>
+<span class="n">multiplexing_api</span><span class="p">:</span><span class="n">kqueue</span>
+<span class="n">gcc_version</span><span class="p">:</span><span class="mf">4.2.1</span>
+<span class="n">process_id</span><span class="p">:</span><span class="mi">528</span>
+<span class="n">run_id</span><span class="p">:</span><span class="mi">4</span><span class="n">b4aff36750579760e62d213a311ff7202560caa</span>
+<span class="n">tcp_port</span><span class="p">:</span><span class="mi">7711</span>
+<span class="n">uptime_in_seconds</span><span class="p">:</span><span class="mi">374</span>
+<span class="n">uptime_in_days</span><span class="p">:</span><span class="mi">0</span>
+<span class="n">hz</span><span class="p">:</span><span class="mi">10</span>
+<span class="n">config_file</span><span class="p">:</span>
 
-# Clients
-connected_clients:1
-client_longest_output_list:0
-client_biggest_input_buf:0
-blocked_clients:0
+<span class="o">#</span> <span class="n">Clients</span>
+<span class="n">connected_clients</span><span class="p">:</span><span class="mi">1</span>
+<span class="n">client_longest_output_list</span><span class="p">:</span><span class="mi">0</span>
+<span class="n">client_biggest_input_buf</span><span class="p">:</span><span class="mi">0</span>
+<span class="n">blocked_clients</span><span class="p">:</span><span class="mi">0</span>
 
-# Memory
-used_memory:960160
-used_memory_human:937.66K
-used_memory_rss:1519616
-used_memory_peak:960864
-used_memory_peak_human:938.34K
-mem_fragmentation_ratio:1.58
-mem_allocator:libc
+<span class="o">#</span> <span class="n">Memory</span>
+<span class="n">used_memory</span><span class="p">:</span><span class="mi">960160</span>
+<span class="n">used_memory_human</span><span class="p">:</span><span class="mf">937.66</span><span class="n">K</span>
+<span class="n">used_memory_rss</span><span class="p">:</span><span class="mi">1519616</span>
+<span class="n">used_memory_peak</span><span class="p">:</span><span class="mi">960864</span>
+<span class="n">used_memory_peak_human</span><span class="p">:</span><span class="mf">938.34</span><span class="n">K</span>
+<span class="n">mem_fragmentation_ratio</span><span class="p">:</span><span class="mf">1.58</span>
+<span class="n">mem_allocator</span><span class="p">:</span><span class="n">libc</span>
 
-# Jobs
-registered_jobs:0
+<span class="o">#</span> <span class="n">Jobs</span>
+<span class="n">registered_jobs</span><span class="p">:</span><span class="mi">0</span>
 
-# Queues
-registered_queues:1
+<span class="o">#</span> <span class="n">Queues</span>
+<span class="n">registered_queues</span><span class="p">:</span><span class="mi">1</span>
 
-# Persistence
-loading:0
-aof_enabled:0
-aof_rewrite_in_progress:0
-aof_rewrite_scheduled:0
-aof_last_rewrite_time_sec:-1
-aof_current_rewrite_time_sec:-1
-aof_last_bgrewrite_status:ok
-aof_last_write_status:ok
+<span class="o">#</span> <span class="n">Persistence</span>
+<span class="n">loading</span><span class="p">:</span><span class="mi">0</span>
+<span class="n">aof_enabled</span><span class="p">:</span><span class="mi">0</span>
+<span class="n">aof_rewrite_in_progress</span><span class="p">:</span><span class="mi">0</span>
+<span class="n">aof_rewrite_scheduled</span><span class="p">:</span><span class="mi">0</span>
+<span class="n">aof_last_rewrite_time_sec</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">aof_current_rewrite_time_sec</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">aof_last_bgrewrite_status</span><span class="p">:</span><span class="n">ok</span>
+<span class="n">aof_last_write_status</span><span class="p">:</span><span class="n">ok</span>
 
-# Stats
-total_connections_received:1
-total_commands_processed:9
-instantaneous_ops_per_sec:0
-total_net_input_bytes:780
-total_net_output_bytes:415
-instantaneous_input_kbps:0.00
-instantaneous_output_kbps:0.00
-rejected_connections:0
-latest_fork_usec:0
+<span class="o">#</span> <span class="n">Stats</span>
+<span class="n">total_connections_received</span><span class="p">:</span><span class="mi">1</span>
+<span class="n">total_commands_processed</span><span class="p">:</span><span class="mi">9</span>
+<span class="n">instantaneous_ops_per_sec</span><span class="p">:</span><span class="mi">0</span>
+<span class="n">total_net_input_bytes</span><span class="p">:</span><span class="mi">780</span>
+<span class="n">total_net_output_bytes</span><span class="p">:</span><span class="mi">415</span>
+<span class="n">instantaneous_input_kbps</span><span class="p">:</span><span class="mf">0.00</span>
+<span class="n">instantaneous_output_kbps</span><span class="p">:</span><span class="mf">0.00</span>
+<span class="n">rejected_connections</span><span class="p">:</span><span class="mi">0</span>
+<span class="n">latest_fork_usec</span><span class="p">:</span><span class="mi">0</span>
 
-# CPU
-used_cpu_sys:1.54
-used_cpu_user:0.73
-used_cpu_sys_children:0.00
-used_cpu_user_children:0.00
+<span class="o">#</span> <span class="n">CPU</span>
+<span class="n">used_cpu_sys</span><span class="p">:</span><span class="mf">1.54</span>
+<span class="n">used_cpu_user</span><span class="p">:</span><span class="mf">0.73</span>
+<span class="n">used_cpu_sys_children</span><span class="p">:</span><span class="mf">0.00</span>
+<span class="n">used_cpu_user_children</span><span class="p">:</span><span class="mf">0.00</span>
 </pre></div>
 </div>
 </div>

@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -132,24 +142,24 @@
             
   <div class="section" id="qlen">
 <h1>QLEN<a class="headerlink" href="#qlen" title="永久链接至标题">¶</a></h1>
-<div class="highlight-python"><div class="highlight"><pre>QLEN &lt;queue-name&gt;
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">QLEN</span> <span class="o">&lt;</span><span class="n">queue</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>返回队列目前存放的任务数量。</p>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; QLEN greeting                               -- 空队列
-(integer) 0
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">disque</span><span class="o">&gt;</span> <span class="n">QLEN</span> <span class="n">greeting</span>                               <span class="c1">-- 空队列</span>
+<span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">0</span>
 
-disque&gt; ADDJOB greeting &quot;hello world!&quot; 0            -- 将第一个任务推入到队列
-DI216f7fa141be40b1a54db80875bacec836377a6905a0SQ
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">hello world!&quot;</span> <span class="mi">0</span>            <span class="c1">-- 将第一个任务推入到队列</span>
+<span class="n">DI216f7fa141be40b1a54db80875bacec836377a6905a0SQ</span>
 
-disque&gt; QLEN greeting
-(integer) 1
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">QLEN</span> <span class="n">greeting</span>
+<span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>
 
-disque&gt; ADDJOB greeting &quot;good morning!&quot; 0           -- 将第二个任务推入到队列
-DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">good morning!&quot;</span> <span class="mi">0</span>           <span class="c1">-- 将第二个任务推入到队列</span>
+<span class="n">DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ</span>
 
-disque&gt; QLEN greeting
-(integer) 2
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">QLEN</span> <span class="n">greeting</span>
+<span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">2</span>
 </pre></div>
 </div>
 </div>

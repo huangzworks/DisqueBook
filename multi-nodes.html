@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -140,7 +150,7 @@
 <p>假设我们现在打算运行三个 Disque 节点，
 那么首先要做的就是创建三个文件夹，
 然后分别在这些文件夹里面运行 <code class="docutils literal"><span class="pre">disque-server</span></code> ：</p>
-<div class="highlight-python"><div class="highlight"><pre>$ mkdir node10086 node10087 node10088   -- 创建三个文件夹
+<div class="highlight-lua"><div class="highlight"><pre>$ mkdir node10086 node10087 node10088   -- 创建三个文件夹
 
 $ cd node10086                          -- 进入 node10086 文件夹
 
@@ -162,7 +172,7 @@ $ disque-server --port 10088 &amp;          -- 然后启动一个端口号为 10
 接下来要做的就是将这三个节点组合起来，
 形成一个包含三个节点的集群，
 步骤如下：</p>
-<div class="highlight-python"><div class="highlight"><pre>$ disque -p 10086                               -- 连接端口号为 10086 的节点
+<div class="highlight-lua"><div class="highlight"><pre>$ disque -p 10086                               -- 连接端口号为 10086 的节点
 127.0.0.1:10086&gt; CLUSTER INFO                   -- 打印集群信息
 cluster_state:ok
 cluster_known_nodes:1                           -- 目前集群只有一个节点

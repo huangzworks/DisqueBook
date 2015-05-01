@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -132,7 +142,7 @@
             
   <div class="section" id="addjob">
 <h1>ADDJOB<a class="headerlink" href="#addjob" title="永久链接至标题">¶</a></h1>
-<div class="highlight-python"><div class="highlight"><pre>ADDJOB queue_name job &lt;ms-timeout&gt; [REPLICATE &lt;count&gt;] [DELAY &lt;sec&gt;] [RETRY &lt;sec&gt;] [TTL &lt;sec&gt;] [MAXLEN &lt;count&gt;] [ASYNC]
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">ADDJOB</span> <span class="n">queue_name</span> <span class="n">job</span> <span class="o">&lt;</span><span class="n">ms</span><span class="o">-</span><span class="n">timeout</span><span class="o">&gt;</span> <span class="p">[</span><span class="n">REPLICATE</span> <span class="o">&lt;</span><span class="n">count</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="n">DELAY</span> <span class="o">&lt;</span><span class="n">sec</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="n">RETRY</span> <span class="o">&lt;</span><span class="n">sec</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="n">TTL</span> <span class="o">&lt;</span><span class="n">sec</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="n">MAXLEN</span> <span class="o">&lt;</span><span class="n">count</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="n">ASYNC</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>将一个新任务添加到指定的队列里面。</p>
@@ -196,14 +206,14 @@ Disque 不关心任务的具体含义，
 或者任务已经被正确地复制到了指定数量的节点上面时，
 命令返回已入队任务的 ID ；
 否则命令返回错误。</p>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; ADDJOB greeting &quot;hello world!&quot; 0            -- 将任务放进队列里面
-DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ    -- 任务 ID
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">hello world!&quot;</span> <span class="mi">0</span>            <span class="c1">-- 将任务放进队列里面</span>
+<span class="n">DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ</span>    <span class="c1">-- 任务 ID</span>
 
-disque&gt; ADDJOB greeting &quot;good morning!&quot; 0
-DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">good morning!&quot;</span> <span class="mi">0</span>
+<span class="n">DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ</span>
 
-disque&gt; ADDJOB greeting &quot;bye bye~&quot; 0
-DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">bye bye~&quot;</span> <span class="mi">0</span>
+<span class="n">DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ</span>
 </pre></div>
 </div>
 </div>

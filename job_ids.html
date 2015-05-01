@@ -31,6 +31,7 @@
 
   
     <link rel="top" title="Disque 使用教程" href="index.html"/>
+        <link rel="next" title="Disque 源码分析" href="code-analysis.html"/>
         <link rel="prev" title="DELJOB" href="deljob.html"/> 
 
   
@@ -92,6 +93,16 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -135,7 +146,7 @@
 <p>每个任务 ID 总是以 <code class="docutils literal"><span class="pre">&quot;DI&quot;</span></code> 开头，并以 <code class="docutils literal"><span class="pre">&quot;SQ&quot;</span></code> 结束，
 而且总是由正好 48 个字符组成。</p>
 <p>任务 ID 可以被分为几个不同的部分：</p>
-<div class="highlight-python"><div class="highlight"><pre>DI | 0f0c644f | d3ccb51c2cedbd47fcb6f312646c993c | 05a0 | SQ
+<div class="highlight-lua"><div class="highlight"><pre>DI | 0f0c644f | d3ccb51c2cedbd47fcb6f312646c993c | 05a0 | SQ
 </pre></div>
 </div>
 <p>以下是各个部分的含义：</p>
@@ -158,14 +169,14 @@
 <p>因为任务 ID 只是用了 32 个二进制位来储存节点 ID ，
 所以在包含 100 个节点的 Disque 集群里面，
 这个 32 位 ID 出现碰撞的几率可以通过生日悖论（birthday paradox）计算得出：</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">P</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">32</span><span class="p">)</span> <span class="o">=</span> <span class="o">.</span><span class="mo">000001164</span>
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">P</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">2</span><span class="o">^</span><span class="mi">32</span><span class="p">)</span> <span class="o">=</span> <span class="mf">.000001164</span>
 </pre></div>
 </div>
 <p>在发生碰撞的情况下，
 工作进程可能会做出不高效的选择。</p>
 <p>任务 ID 中的 128 位随机生成 ID 几乎不可能出现碰撞，
 因为它是由以下方法计算得出的：</p>
-<div class="highlight-python"><div class="highlight"><pre>128 bit ID = SHA1(seed || counter)
+<div class="highlight-lua"><div class="highlight"><pre>128 bit ID = SHA1(seed || counter)
 </pre></div>
 </div>
 <p>其中 <code class="docutils literal"><span class="pre">seed</span></code> 是服务器在启动时通过 <code class="docutils literal"><span class="pre">/dev/urandom</span></code> 生成的，
@@ -177,6 +188,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="code-analysis.html" class="btn btn-neutral float-right" title="Disque 源码分析" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="deljob.html" class="btn btn-neutral" title="DELJOB" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>

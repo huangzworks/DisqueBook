@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -134,7 +144,7 @@
 <h1>客户端<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
 <p>Disque 在源码中附带了命令行客户端程序 <code class="docutils literal"><span class="pre">disque</span></code> ，
 通过这个程序可以以交互的形式向 Disque 发送命令：</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ./disque
+<div class="highlight-lua"><div class="highlight"><pre>$ ./disque
 127.0.0.1:7711&gt; PING
 PONG
 </pre></div>

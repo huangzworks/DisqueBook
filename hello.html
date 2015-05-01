@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -134,13 +144,13 @@
 <h1>HELLO<a class="headerlink" href="#hello" title="永久链接至标题">¶</a></h1>
 <p>返回问候语格式的版本号、当前节点的 ID、所有节点的 ID、IP 地址、端口号、优先级（越低越好，低优先级表示节点可用）。
 客户端在连接 Disque 节点的时候应该使用这个命令作为握手命令。</p>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; HELLO
-1) (integer) 1                                      -- 版本号
-2) &quot;216f7fa1b58239ad29dd64c02bfe50e609e88575&quot;       -- 当前节点的 ID
-3) 1) &quot;216f7fa1b58239ad29dd64c02bfe50e609e88575&quot;    -- 一个包含所有节点 ID 的数组
-2) &quot;&quot;                                               -- 当前节点的 IP 地址
-3) &quot;7711&quot;                                           -- 当前节点的端口号
-4) &quot;1&quot;                                              -- 当前节点的优先级
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">disque</span><span class="o">&gt;</span> <span class="n">HELLO</span>
+<span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>                                      <span class="c1">-- 版本号</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">216f7fa1b58239ad29dd64c02bfe50e609e88575&quot;</span>       <span class="c1">-- 当前节点的 ID</span>
+<span class="mi">3</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">216f7fa1b58239ad29dd64c02bfe50e609e88575&quot;</span>    <span class="c1">-- 一个包含所有节点 ID 的数组</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">&quot;</span>                                               <span class="c1">-- 当前节点的 IP 地址</span>
+<span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">7711&quot;</span>                                           <span class="c1">-- 当前节点的端口号</span>
+<span class="mi">4</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">1&quot;</span>                                              <span class="c1">-- 当前节点的优先级</span>
 </pre></div>
 </div>
 </div>

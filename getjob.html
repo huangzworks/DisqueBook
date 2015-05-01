@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -132,7 +142,7 @@
             
   <div class="section" id="getjob">
 <h1>GETJOB<a class="headerlink" href="#getjob" title="永久链接至标题">¶</a></h1>
-<div class="highlight-python"><div class="highlight"><pre>GETJOB [TIMEOUT &lt;ms-timeout&gt;] [COUNT &lt;count&gt;] FROM queue1 queue2 ... queueN
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">GETJOB</span> <span class="p">[</span><span class="n">TIMEOUT</span> <span class="o">&lt;</span><span class="n">ms</span><span class="o">-</span><span class="n">timeout</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="n">COUNT</span> <span class="o">&lt;</span><span class="n">count</span><span class="o">&gt;</span><span class="p">]</span> <span class="n">FROM</span> <span class="n">queue1</span> <span class="n">queue2</span> <span class="o">...</span> <span class="n">queueN</span>
 </pre></div>
 </div>
 <p>从给定的队列里面取出可用的任务，
@@ -156,55 +166,55 @@
 执行命令的节点会与其他节点进行消息交换，
 以便将可能存在的任务移动到这个节点里面，
 从而尽快地将任务返回给被阻塞的客户端。</p>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; ADDJOB greeting &quot;hello world!&quot; 0                    -- 将三个任务放进队列里面
-DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">hello world!&quot;</span> <span class="mi">0</span>                    <span class="c1">-- 将三个任务放进队列里面</span>
+<span class="n">DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ</span>
 
-disque&gt; ADDJOB greeting &quot;good morning!&quot; 0
-DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">good morning!&quot;</span> <span class="mi">0</span>
+<span class="n">DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ</span>
 
-disque&gt; ADDJOB greeting &quot;bye bye~&quot; 0
-DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">bye bye~&quot;</span> <span class="mi">0</span>
+<span class="n">DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ</span>
 
-disque&gt; GETJOB FROM greeting                                -- 依次地从队列里面取出三个任务
-1) 1) &quot;greeting&quot;                                            -- 任务来自 &quot;greeting&quot; 队列
-   2) &quot;DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ&quot;    -- 任务的 ID
-   3) &quot;hello world!&quot;                                        -- 任务的内容
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">GETJOB</span> <span class="n">FROM</span> <span class="n">greeting</span>                                <span class="c1">-- 依次地从队列里面取出三个任务</span>
+<span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">greeting&quot;</span>                                            <span class="c1">-- 任务来自 &quot;greeting&quot; 队列</span>
+   <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ&quot;</span>    <span class="c1">-- 任务的 ID</span>
+   <span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">hello world!&quot;</span>                                        <span class="c1">-- 任务的内容</span>
 
-disque&gt; GETJOB FROM greeting
-1) 1) &quot;greeting&quot;
-   2) &quot;DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ&quot;
-   3) &quot;good morning!&quot;
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">GETJOB</span> <span class="n">FROM</span> <span class="n">greeting</span>
+<span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">greeting&quot;</span>
+   <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ&quot;</span>
+   <span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">good morning!&quot;</span>
 
-disque&gt; GETJOB FROM greeting
-1) 1) &quot;greeting&quot;
-   2) &quot;DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ&quot;
-   3) &quot;bye bye~&quot;
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">GETJOB</span> <span class="n">FROM</span> <span class="n">greeting</span>
+<span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">greeting&quot;</span>
+   <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ&quot;</span>
+   <span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">bye bye~&quot;</span>
 
-disque&gt; GETJOB TIMEOUT 5000 FROM greeting                   -- 命令在等待 5000 毫秒之后返回
-(nil)                                                       -- 未取得任何任务
-(5.09s)
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">GETJOB</span> <span class="n">TIMEOUT</span> <span class="mi">5000</span> <span class="n">FROM</span> <span class="n">greeting</span>                   <span class="c1">-- 命令在等待 5000 毫秒之后返回</span>
+<span class="p">(</span><span class="kc">nil</span><span class="p">)</span>                                                       <span class="c1">-- 未取得任何任务</span>
+<span class="p">(</span><span class="mf">5.09</span><span class="n">s</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>以下是使用 <code class="docutils literal"><span class="pre">COUNT</span></code> 选项一次返回多个任务的示例：</p>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; ADDJOB todo &quot;finish homework&quot; 0
-DIb47e59860656f0cfccc59f79e468b5ef4516d6a605a0SQ
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">todo</span> <span class="s2">&quot;</span><span class="s">finish homework&quot;</span> <span class="mi">0</span>
+<span class="n">DIb47e59860656f0cfccc59f79e468b5ef4516d6a605a0SQ</span>
 
-disque&gt; ADDJOB todo &quot;buy some milk&quot; 0
-DIb47e5986173aae4f703877e1f4afedade0ca82b205a0SQ
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">todo</span> <span class="s2">&quot;</span><span class="s">buy some milk&quot;</span> <span class="mi">0</span>
+<span class="n">DIb47e5986173aae4f703877e1f4afedade0ca82b205a0SQ</span>
 
-disque&gt; ADDJOB todo &quot;watch movie&quot; 0
-DIb47e59866f34f9a38b868c28fe305baa9c1f688105a0SQ
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">todo</span> <span class="s2">&quot;</span><span class="s">watch movie&quot;</span> <span class="mi">0</span>
+<span class="n">DIb47e59866f34f9a38b868c28fe305baa9c1f688105a0SQ</span>
 
-disque&gt; GETJOB COUNT 3 FROM todo                            -- 一次返回三个任务
-1) 1) &quot;todo&quot;                                                -- 第一项任务
-   2) &quot;DIb47e59860656f0cfccc59f79e468b5ef4516d6a605a0SQ&quot;
-   3) &quot;finish homework&quot;
-2) 1) &quot;todo&quot;                                                -- 第二项任务
-   2) &quot;DIb47e5986173aae4f703877e1f4afedade0ca82b205a0SQ&quot;
-   3) &quot;buy some milk&quot;
-3) 1) &quot;todo&quot;                                                -- 第三项任务
-   2) &quot;DIb47e59866f34f9a38b868c28fe305baa9c1f688105a0SQ&quot;
-   3) &quot;watch movie&quot;
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">GETJOB</span> <span class="n">COUNT</span> <span class="mi">3</span> <span class="n">FROM</span> <span class="n">todo</span>                            <span class="c1">-- 一次返回三个任务</span>
+<span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">todo&quot;</span>                                                <span class="c1">-- 第一项任务</span>
+   <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DIb47e59860656f0cfccc59f79e468b5ef4516d6a605a0SQ&quot;</span>
+   <span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">finish homework&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">todo&quot;</span>                                                <span class="c1">-- 第二项任务</span>
+   <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DIb47e5986173aae4f703877e1f4afedade0ca82b205a0SQ&quot;</span>
+   <span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">buy some milk&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">todo&quot;</span>                                                <span class="c1">-- 第三项任务</span>
+   <span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DIb47e59866f34f9a38b868c28fe305baa9c1f688105a0SQ&quot;</span>
+   <span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">watch movie&quot;</span>
 </pre></div>
 </div>
 </div>

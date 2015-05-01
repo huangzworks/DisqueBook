@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -132,7 +142,7 @@
             
   <div class="section" id="qpeek">
 <h1>QPEEK<a class="headerlink" href="#qpeek" title="永久链接至标题">¶</a></h1>
-<div class="highlight-python"><div class="highlight"><pre>QPEEK &lt;qname&gt; &lt;count&gt;
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">QPEEK</span> <span class="o">&lt;</span><span class="n">qname</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">count</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>在不取出任务的情况下，
@@ -144,30 +154,30 @@
 <li>当 <code class="docutils literal"><span class="pre">count</span></code> 为负数时，
 命令以从新到旧的顺序返回任务。</li>
 </ul>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; ADDJOB greeting &quot;hello world!&quot; 0                    -- 将三个任务放入队列
-DI216f7fa1590f8975b29db52f663c18f80f73c24705a0SQ
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">hello world!&quot;</span> <span class="mi">0</span>                    <span class="c1">-- 将三个任务放入队列</span>
+<span class="n">DI216f7fa1590f8975b29db52f663c18f80f73c24705a0SQ</span>
 
-disque&gt; ADDJOB greeting &quot;good morning!&quot; 0
-DI216f7fa1c33c8d99678f44b5658545f3f2603b8d05a0SQ
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">good morning!&quot;</span> <span class="mi">0</span>
+<span class="n">DI216f7fa1c33c8d99678f44b5658545f3f2603b8d05a0SQ</span>
 
-disque&gt; ADDJOB greeting &quot;bye bye~&quot; 0
-DI216f7fa1d137377120adaf571418aff559578b8a05a0SQ
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ADDJOB</span> <span class="n">greeting</span> <span class="s2">&quot;</span><span class="s">bye bye~&quot;</span> <span class="mi">0</span>
+<span class="n">DI216f7fa1d137377120adaf571418aff559578b8a05a0SQ</span>
 
-disque&gt; QPEEK greeting 10                                   -- 按从旧到新的顺序返回任务
-1) 1) &quot;DI216f7fa1590f8975b29db52f663c18f80f73c24705a0SQ&quot;
-2) &quot;hello world!&quot;
-2) 1) &quot;DI216f7fa1c33c8d99678f44b5658545f3f2603b8d05a0SQ&quot;
-2) &quot;good morning!&quot;
-3) 1) &quot;DI216f7fa1d137377120adaf571418aff559578b8a05a0SQ&quot;
-2) &quot;bye bye~&quot;
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">QPEEK</span> <span class="n">greeting</span> <span class="mi">10</span>                                   <span class="c1">-- 按从旧到新的顺序返回任务</span>
+<span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa1590f8975b29db52f663c18f80f73c24705a0SQ&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">hello world!&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa1c33c8d99678f44b5658545f3f2603b8d05a0SQ&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">good morning!&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa1d137377120adaf571418aff559578b8a05a0SQ&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">bye bye~&quot;</span>
 
-disque&gt; QPEEK greeting -10                                  -- 按从新到旧的顺序返回任务
-1) 1) &quot;DI216f7fa1d137377120adaf571418aff559578b8a05a0SQ&quot;
-2) &quot;bye bye~&quot;
-2) 1) &quot;DI216f7fa1c33c8d99678f44b5658545f3f2603b8d05a0SQ&quot;
-2) &quot;good morning!&quot;
-3) 1) &quot;DI216f7fa1590f8975b29db52f663c18f80f73c24705a0SQ&quot;
-2) &quot;hello world!&quot;
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">QPEEK</span> <span class="n">greeting</span> <span class="o">-</span><span class="mi">10</span>                                  <span class="c1">-- 按从新到旧的顺序返回任务</span>
+<span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa1d137377120adaf571418aff559578b8a05a0SQ&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">bye bye~&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa1c33c8d99678f44b5658545f3f2603b8d05a0SQ&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">good morning!&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa1590f8975b29db52f663c18f80f73c24705a0SQ&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">hello world!&quot;</span>
 </pre></div>
 </div>
 </div>

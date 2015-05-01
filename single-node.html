@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -138,7 +148,7 @@
 只要确保每个节点的端口号不同即可。</p>
 <p>在默认情况下，
 运行 Disque 服务器程序 <code class="docutils literal"><span class="pre">disque-server</span></code> 将启动一个端口号为 <code class="docutils literal"><span class="pre">7711</span></code> 的 Disque 节点：</p>
-<div class="highlight-python"><div class="highlight"><pre>$ ./disque-server
+<div class="highlight-lua"><div class="highlight"><pre>$ ./disque-server
 528:C 28 Apr 11:50:08.519 # Warning: no config file specified, using the default config. In order to specify a config file use ./disque-server /path/to/disque.conf
 528:P 28 Apr 11:50:08.521 * Increased maximum number of open files to 10032 (it was originally set to 256).
 528:P 28 Apr 11:50:08.528 * Node configuration loaded, I&#39;m 216f7fa1b58239ad29dd64c02bfe50e609e88575

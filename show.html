@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -132,37 +142,37 @@
             
   <div class="section" id="show">
 <h1>SHOW<a class="headerlink" href="#show" title="永久链接至标题">¶</a></h1>
-<div class="highlight-python"><div class="highlight"><pre>SHOW &lt;job-id&gt;
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">SHOW</span> <span class="o">&lt;</span><span class="n">job</span><span class="o">-</span><span class="n">id</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>返回任务的相关描述。</p>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; SHOW DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ
-1) &quot;id&quot;                                                 -- 任务 ID
-2) &quot;DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ&quot;
-3) &quot;queue&quot;                                              -- 所属队列
-4) &quot;greeting&quot;
-5) &quot;state&quot;                                              -- 任务状态
-6) &quot;queued&quot;
-7) &quot;repl&quot;
-8) (integer) 1
-9) &quot;ttl&quot;                                                -- 生存时间
-10) (integer) 86080
-11) &quot;ctime&quot;                                             -- 创建时间
-12) (integer) 1430193729317000000
-13) &quot;delay&quot;                                             -- 是否延迟？
-14) (integer) 0
-15) &quot;retry&quot;                                             -- 何时进行重试？
-16) (integer) 8640
-17) &quot;nodes-delivered&quot;                                   -- 已向以下节点发送该任务
-18) 1) &quot;216f7fa1b58239ad29dd64c02bfe50e609e88575&quot;
-19) &quot;nodes-confirmed&quot;                                   -- 以下节点已确认收到该任务
-20) (empty list or set)
-21) &quot;next-requeue-within&quot;
-22) (integer) 8319321
-23) &quot;next-awake-within&quot;
-24) (integer) 8318821
-25) &quot;body&quot;                                              -- 任务的内容
-26) &quot;good morning!&quot;
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">disque</span><span class="o">&gt;</span> <span class="n">SHOW</span> <span class="n">DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ</span>
+<span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">id&quot;</span>                                                 <span class="c1">-- 任务 ID</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa19e1bbe6f583061dbba0e8e28c6eb64e605a0SQ&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">queue&quot;</span>                                              <span class="c1">-- 所属队列</span>
+<span class="mi">4</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">greeting&quot;</span>
+<span class="mi">5</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">state&quot;</span>                                              <span class="c1">-- 任务状态</span>
+<span class="mi">6</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">queued&quot;</span>
+<span class="mi">7</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">repl&quot;</span>
+<span class="mi">8</span><span class="p">)</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>
+<span class="mi">9</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">ttl&quot;</span>                                                <span class="c1">-- 生存时间</span>
+<span class="mi">10</span><span class="p">)</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">86080</span>
+<span class="mi">11</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">ctime&quot;</span>                                             <span class="c1">-- 创建时间</span>
+<span class="mi">12</span><span class="p">)</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1430193729317000000</span>
+<span class="mi">13</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">delay&quot;</span>                                             <span class="c1">-- 是否延迟？</span>
+<span class="mi">14</span><span class="p">)</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">0</span>
+<span class="mi">15</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">retry&quot;</span>                                             <span class="c1">-- 何时进行重试？</span>
+<span class="mi">16</span><span class="p">)</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">8640</span>
+<span class="mi">17</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">nodes-delivered&quot;</span>                                   <span class="c1">-- 已向以下节点发送该任务</span>
+<span class="mi">18</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">216f7fa1b58239ad29dd64c02bfe50e609e88575&quot;</span>
+<span class="mi">19</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">nodes-confirmed&quot;</span>                                   <span class="c1">-- 以下节点已确认收到该任务</span>
+<span class="mi">20</span><span class="p">)</span> <span class="p">(</span><span class="n">empty</span> <span class="n">list</span> <span class="ow">or</span> <span class="n">set</span><span class="p">)</span>
+<span class="mi">21</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">next-requeue-within&quot;</span>
+<span class="mi">22</span><span class="p">)</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">8319321</span>
+<span class="mi">23</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">next-awake-within&quot;</span>
+<span class="mi">24</span><span class="p">)</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">8318821</span>
+<span class="mi">25</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">body&quot;</span>                                              <span class="c1">-- 任务的内容</span>
+<span class="mi">26</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">good morning!&quot;</span>
 </pre></div>
 </div>
 </div>

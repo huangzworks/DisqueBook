@@ -93,6 +93,16 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="job_ids.html">任务 ID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-analysis.html">Disque 源码分析</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id1">代码重用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id2">服务器状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id3">队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id4">任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id5">节点与集群</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id6">命令执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code-analysis.html#id7">结论</a></li>
+</ul>
+</li>
 </ul>
 
           
@@ -132,7 +142,7 @@
             
   <div class="section" id="ackjob">
 <h1>ACKJOB<a class="headerlink" href="#ackjob" title="永久链接至标题">¶</a></h1>
-<div class="highlight-python"><div class="highlight"><pre>ACKJOB jobid1 jobid2 ... jobidN
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">ACKJOB</span> <span class="n">jobid1</span> <span class="n">jobid2</span> <span class="o">...</span> <span class="n">jobidN</span>
 </pre></div>
 </div>
 <p>通过给定任务 ID ，
@@ -140,26 +150,26 @@
 <p>接收到 <code class="docutils literal"><span class="pre">ACK</span></code> 消息的节点会将该消息复制至多个节点，
 并尝试对任务和来自集群的 <code class="docutils literal"><span class="pre">ACK</span></code> 消息进行垃圾回收操作，
 从而释放被占用的内存。</p>
-<div class="highlight-python"><div class="highlight"><pre>disque&gt; GETJOB FROM greeting                    -- 取出三个任务，然后确认其中两个已被执行
-1) 1) &quot;greeting&quot;
-2) &quot;DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ&quot;
-3) &quot;hello world!&quot;
+<div class="highlight-lua"><div class="highlight"><pre><span class="n">disque</span><span class="o">&gt;</span> <span class="n">GETJOB</span> <span class="n">FROM</span> <span class="n">greeting</span>                    <span class="c1">-- 取出三个任务，然后确认其中两个已被执行</span>
+<span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">greeting&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">hello world!&quot;</span>
 
-disque&gt; GETJOB FROM greeting
-1) 1) &quot;greeting&quot;
-2) &quot;DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ&quot;
-3) &quot;good morning!&quot;
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">GETJOB</span> <span class="n">FROM</span> <span class="n">greeting</span>
+<span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">greeting&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa16a8e4a7428b18c2b0ec180963795b0b705a0SQ&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">good morning!&quot;</span>
 
-disque&gt; GETJOB FROM greeting
-1) 1) &quot;greeting&quot;
-2) &quot;DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ&quot;
-3) &quot;bye bye~&quot;
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">GETJOB</span> <span class="n">FROM</span> <span class="n">greeting</span>
+<span class="mi">1</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">greeting&quot;</span>
+<span class="mi">2</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ&quot;</span>
+<span class="mi">3</span><span class="p">)</span> <span class="s2">&quot;</span><span class="s">bye bye~&quot;</span>
 
-disque&gt; ACKJOB DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ
-(integer) 1
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ACKJOB</span> <span class="n">DI216f7fa17693623ffb3bd8b0902e134f4ab6a5d305a0SQ</span>
+<span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>
 
-disque&gt; ACKJOB DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ
-(integer) 1
+<span class="n">disque</span><span class="o">&gt;</span> <span class="n">ACKJOB</span> <span class="n">DI216f7fa11413878f376588c85aca7c7fa22232f905a0SQ</span>
+<span class="p">(</span><span class="n">integer</span><span class="p">)</span> <span class="mi">1</span>
 </pre></div>
 </div>
 </div>
