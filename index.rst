@@ -59,6 +59,18 @@ Disque 是一个内存储存的分布式任务队列实现，
    scan
 
 
+集群文档
+------------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   cluster-nodes
+   cluster-meet
+   cluster-forget
+   cluster-info
+
+
 设计文档
 ------------------------------------------
 
