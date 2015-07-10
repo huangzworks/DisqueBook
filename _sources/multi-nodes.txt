@@ -41,8 +41,8 @@
     127.0.0.1:10086> CLUSTER INFO                   -- 打印集群信息
     cluster_state:ok
     cluster_known_nodes:1                           -- 目前集群只有一个节点
-    cluster_reachable_nodes:1
-    cluster_size:0
+    cluster_reachable_nodes:0
+    cluster_size:1
     cluster_stats_messages_sent:0
     cluster_stats_messages_received:0
 
@@ -52,8 +52,8 @@
     127.0.0.1:10086> CLUSTER INFO
     cluster_state:ok
     cluster_known_nodes:2                           -- 集群现在有两个节点
-    cluster_reachable_nodes:2
-    cluster_size:1
+    cluster_reachable_nodes:1
+    cluster_size:2
     cluster_stats_messages_sent:5
     cluster_stats_messages_received:5
 
@@ -63,8 +63,8 @@
     127.0.0.1:10086> CLUSTER INFO
     cluster_state:ok
     cluster_known_nodes:3                           -- 集群现在有三个节点
-    cluster_reachable_nodes:3
-    cluster_size:2
+    cluster_reachable_nodes:2
+    cluster_size:3
     cluster_stats_messages_sent:23
     cluster_stats_messages_received:23
 
